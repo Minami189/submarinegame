@@ -56,7 +56,7 @@ export default function Start(){
             <div className={classes.center}>
                 {
                     effects.map((effect)=>{
-                        return(<Effect word={effect.word} avatar={effect.avatar} username={effect.username}/>)
+                        return(<Effect word={effect.word} avatar={effect.avatar} username={effect.username} oxadd={effect.oxaddd}/>)
                     })
                 }
                 <img src={submarine} className={classes.submarine}/>

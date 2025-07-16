@@ -15,7 +15,7 @@ export default function Tiles({setEffects}){
         socket.on("accept_word", (data)=>{
             const successSound = new Audio(wordSuccess);
             successSound.play();
-            setEffects(prev=>prev.concat({word: data.word, avatar: data.avatar, username: data.username}));
+            setEffects(prev=>prev.concat({word: data.word, avatar: data.avatar, username: data.username, oxadd:data.oxygen}));
         })
 
         socket.on("deny",()=>{

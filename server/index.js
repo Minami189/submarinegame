@@ -63,7 +63,7 @@ io.on("connection", (socket)=>{
             depth: 0,
             interval: setInterval(()=>{
                 if(rooms[roomID].started){
-                    rooms[roomID].depth += 25;
+                    rooms[roomID].depth += 40;
                     rooms[roomID].oxygen -= 1;
                     if(rooms[roomID].oxygen <= 0){
                         rooms[roomID].state = "lose"
@@ -149,10 +149,11 @@ io.on("connection", (socket)=>{
             return;
         } 
 
-        rooms[data.roomID].oxygen += 5;
+        const oxadd = Math.floor(Math.random() * 10) + 1
+        rooms[data.roomID].oxygen += oxadd;
         rooms[data.roomID].depth += 75;
         rooms[data.roomID].wordsInputted.push(data.word);
-        io.to(data.roomID).emit("accept_word", {word: data.word, avatar:players[data.instanceID].avatar, username:players[data.instanceID].username});
+        io.to(data.roomID).emit("accept_word", {word: data.word, avatar:players[data.instanceID].avatar, username:players[data.instanceID].username, oxygen: oxadd});
     })
 })
  

@@ -1,7 +1,7 @@
 import classes from "./effect.module.css"
 import { useEffect, useContext } from "react"
 import { AppContext } from "../../App";
-export default function Effect({word, username, avatar}){
+export default function Effect({word, username, avatar, oxadd}){
     const {avatars} = useContext(AppContext);
 
     return(
@@ -9,7 +9,7 @@ export default function Effect({word, username, avatar}){
             <img src={avatars[avatar]}/>
             <div className={classes.content}>
                 <h5>{username}</h5>
-                <h1>{word}</h1>
+                <h1>{`${word} +${oxadd}%`}</h1>
             </div>
         </div>
     )
