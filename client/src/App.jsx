@@ -6,7 +6,7 @@ import "./App.css"
 import io from "socket.io-client";
 import Landing from "./landing/landing.jsx";
 import Start from "./start/start.jsx";
-const socket = io.connect("http://localhost:5000");
+const socket = io.connect(import.meta.env.VITE_BACKEND_URL);
 export const AppContext = createContext();
 
 import av1 from "./assets/av1.png";
@@ -23,9 +23,7 @@ function App() {
     //lobby - when in a crew already
     //start - when game has started
     
-  useEffect(()=>{
 
-  }, [])
   return (
     <AppContext.Provider value={{socket, state, setState, av, setAv, avatars}}>
       <BrowserRouter>
