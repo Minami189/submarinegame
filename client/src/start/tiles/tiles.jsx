@@ -80,8 +80,8 @@ export default function Tiles({setEffects}){
 
     return(
         <div className={classes.tilesWrapper} onClick={() => wordInput.current?.focus()}>
-            <form onSubmit={handleSubmit}>
-                <input style={{opacity:0, pointerEvents: "none"}} autoFocus onChange={handleChange} ref={wordInput} maxLength={5} onBlur={()=>wordInput.current.focus()}/>
+            <form onSubmit={handleSubmit} style={{position:"absolute", zIndex: -1}}>
+                <input autoFocus onChange={handleChange} ref={wordInput} maxLength={5} onBlur={()=>setTimeout(() => wordInput.current?.focus(), 100)}/>
             </form>
             
             <div className={`${classes.tile} ${denied ? classes.denied : ""}`} onClick={() => wordInput.current?.focus()}>{word[0]}</div>
