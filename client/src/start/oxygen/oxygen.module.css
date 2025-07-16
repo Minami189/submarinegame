@@ -1,0 +1,48 @@
+.border{
+    position:absolute;
+    height: 70vh;
+    width: 100px;
+    background-color: transparent;
+    top: 10vh;
+    left: 10vh;
+    z-index: 5;
+    border: solid #484343 2px;
+    border-radius: 55px;
+    overflow: hidden;
+    display:flex;
+    align-items: end;
+}
+
+.fill{
+    position: absolute;
+    width:100%;
+    background: linear-gradient(#02B97F, #29BBB4);
+    transition: height 500ms ease;
+    z-index: -1;
+}
+
+
+.o2text{
+    height: 50%;
+    width:100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+
+}
+
+.o2text h1{
+    font-family: Inter;
+    font-weight: bold;
+    font-size: 2rem;
+    color: white;
+}
+
+.o2text h4{
+    font-family: Inter;
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin: 0px;
+    color: white;
+}

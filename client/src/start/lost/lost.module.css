@@ -1,0 +1,54 @@
+.backdrop{
+    position:absolute;
+    background-color: rgba(0, 0, 0, 0.623);
+    width: 100vw;
+    height: 100vh;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.lostBody{
+    background-color: #E8E8D7;
+    width: 20%;
+    height: 45%;
+    display:flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: column;
+    border-radius: 25px;
+}
+
+.blueButton{
+    background-color: #1C3363;
+    color: #FFFFFF;
+    font-family: Inter;
+    font-weight: bold;
+    padding: 5px 20px 5px 20px;
+    border:none;
+    border-radius: 12px;
+    font-size: 1.2rem;
+    width: 10rem;
+    height: 3rem;
+    text-align: center;
+    cursor: pointer;
+}
+
+.lostBody h2{
+    font-size: 2.5rem;
+    line-height: normal;
+    text-align: center;
+    width: 65%;
+}
+
+.lostBody h1{
+    background-color: #1C3363;
+    margin: 0px;
+    padding: 5px 25px 5px 25px;
+    color: #e0e0d5;
+    border-radius: 15px;
+    font-family: Inter;
+    font-weight: normal;
+    font-size: 1.25rem;
+}

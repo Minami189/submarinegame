@@ -1,0 +1,116 @@
+body{
+    margin: 0px;
+}
+
+.background{
+    height:100vh;
+    width:100%;
+    background: linear-gradient(#8BC8FF, #F3E2D1);
+    background-repeat: no-repeat;
+    position:relative;
+    overflow: hidden;
+}
+
+.center{
+    position:absolute;
+    height:75vh;
+    width:100%;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+.water1 {
+  width: 100%;
+  height: 5500px;
+  position: absolute;
+  border-top: solid white 10px;
+  top: -10px;
+  background: linear-gradient(#03E3FC, #008A99);
+}
+
+.water2 {
+  width: 100%;
+  height: 6500px;
+  position: absolute;
+  top: 5500px; 
+  background: linear-gradient(#008A99, #00567B);
+}
+
+.water3 {
+  width: 100%;
+  height: 7500px;
+  position: absolute;
+  top: 12000px; 
+  background: linear-gradient(#00567B, #000000);
+}
+
+.water4 {
+  width: 100%;
+  height: 10500px;
+  position: absolute;
+  top: 19500px; 
+  background-color: black;
+}
+
+
+.map{
+    position: absolute;
+    width: 100%;
+    height: 35000px; /* total height of all sections */
+    top: 0;
+    left: 0;
+    transition: transform 0.5s ease;
+    animation: fall 3s ease;
+}
+
+.submarine{
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -20%);
+    width: 500px;
+    z-index: 5;
+    animation: sfall 5s forwards,
+    moving 5s infinite;
+}
+
+@keyframes fall{
+    0%{
+        transform: translateY(100vh);
+    }
+
+    100%{
+        transform: translateY(-0vh);
+    }
+}
+
+@keyframes sfall{
+    0%{
+        transform: translate(-50%,-10vh);
+    }
+
+    100%{
+        transform: translate(-50%, 0vh);
+    }
+}
+
+@keyframes moving{
+    0%{
+        transform: rotateZ(0deg) translate(-50%, 0vh);
+
+    }
+
+    44%{
+        transform: rotateZ(1deg) translate(-50%, 0vh);
+    }
+
+    80%{
+        transform: rotateZ(-1deg) translate(-50%, 0vh);
+    }
+
+    100%{
+        transform: rotateZ(0deg) translate(-50%, 0vh);
+    }
+}

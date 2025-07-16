@@ -1,0 +1,91 @@
+body{
+    margin: 0px;
+}
+
+.background{
+    height:100vh;
+    width:100%;
+    background: linear-gradient(#8BC8FF, #F3E2D1);
+    position:relative;
+    overflow:hidden;
+}
+
+.water{
+    position:absolute;
+    width: 100%;
+    height: 20%;
+    bottom: 0px;
+    background: linear-gradient(#03E3FC, #008A99);
+    border-top: solid white 10px;
+}
+
+.header{
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    padding: 15px 0px 0px 25px;
+}
+
+.header h1, h2{
+    font-family: Inter;
+    color: #1D3363;
+    line-height: 10px;
+    font-size: 1.1rem;
+}
+
+.header h1{
+    font-weight: normal;
+    font-size: 1.5rem;
+}
+
+.submarineWrapper{
+    width:100%;
+    height:65%;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+}
+
+.submarineWrapper h1, h3{
+    color: #1D3363;
+    font-family: Inter;
+    line-height: 15px;
+}
+
+.submarineWrapper h1{
+    font-size: 5rem;
+}
+
+.submarineWrapper h3{
+    font-weight: normal;
+}
+
+.submarineWrapper img{
+    width: 500px;
+}
+
+.blueButton{
+    background-color: #1C3363;
+    color: #FFFFFF;
+    font-family: Inter;
+    font-weight: bold;
+    padding: 5px 20px 5px 20px;
+    border:none;
+    border-radius: 12px;
+    font-size: 1.2rem;
+    width: 10rem;
+    height: 3rem;
+    text-align: center;
+    cursor: pointer;
+}
+
+.hidden{
+    display:none;
+}
+
+.buttonWrapper{
+    display:flex;
+    gap: 25px;
+}
