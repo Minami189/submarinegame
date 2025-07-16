@@ -6,7 +6,7 @@ import "./App.css"
 import io from "socket.io-client";
 import Landing from "./landing/landing.jsx";
 import Start from "./start/start.jsx";
-const socket = io.connect(import.meta.env.VITE_BACKEND_URL);
+const socket = io.connect(process.env.REACT_APP_BACKEND_URL);
 export const AppContext = createContext();
 
 import av1 from "./assets/av1.png";
