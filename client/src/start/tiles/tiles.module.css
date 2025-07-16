@@ -35,5 +35,27 @@
 
 .denied {
   animation: shake 0.4s ease;
-  border: solid rgb(170, 4, 4) 4px;
+  border: solid rgb(94, 2, 2) 4px;
+  background: linear-gradient(rgb(160, 2, 2), rgb(134, 27, 27));
+}
+
+@media only screen and (min-device-width: 1024px) and (max-device-width: 1366px) {
+  input {
+    font-size: 20px; /* Make input more tappable */
+  }
+
+  .tilesWrapper{
+    position: absolute;
+    height: 70vh;
+    width: 90%;
+    display:flex;
+    flex-direction: column;
+    justify-content:center;
+    align-items: flex-end;
+    gap: 15px;
+  }
+
+  .tile{
+    margin-bottom: 0px;
+  }
 }
