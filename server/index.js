@@ -151,7 +151,8 @@ io.on("connection", (socket)=>{
         const oxadd = Math.floor(Math.random() * 10) + 5
         rooms[data.roomID].oxygen += oxadd;
         if(rooms[data.roomID].oxygen > 100){
-            rooms[data.roomID].oxygen = 100;
+
+            rooms[data.roomID].oxygen = 101;
         }
         rooms[data.roomID].depth += 75;
         rooms[data.roomID].wordsInputted.push(data.word);
