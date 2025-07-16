@@ -79,16 +79,16 @@ export default function Tiles({setEffects}){
 
 
     return(
-        <div className={classes.tilesWrapper}>
+        <div className={classes.tilesWrapper} onClick={() => wordInput.current?.focus()}>
             <form onSubmit={handleSubmit}>
                 <input style={{opacity:0, pointerEvents: "none"}} autoFocus onChange={handleChange} ref={wordInput} maxLength={5} onBlur={()=>wordInput.current.focus()}/>
             </form>
             
-            <div className={`${classes.tile} ${denied ? classes.denied : ""}`} >{word[0]}</div>
-            <div className={`${classes.tile} ${denied ? classes.denied : ""}`} >{word[1]}</div>
-            <div className={`${classes.tile} ${denied ? classes.denied : ""}`} >{word[2]}</div>
-            <div className={`${classes.tile} ${denied ? classes.denied : ""}`} >{word[3]}</div>
-            <div className={`${classes.tile} ${denied ? classes.denied : ""}`} >{word[4]}</div>
+            <div className={`${classes.tile} ${denied ? classes.denied : ""}`} onClick={() => wordInput.current?.focus()}>{word[0]}</div>
+            <div className={`${classes.tile} ${denied ? classes.denied : ""}`} onClick={() => wordInput.current?.focus()}>{word[1]}</div>
+            <div className={`${classes.tile} ${denied ? classes.denied : ""}`} onClick={() => wordInput.current?.focus()}>{word[2]}</div>
+            <div className={`${classes.tile} ${denied ? classes.denied : ""}`} onClick={() => wordInput.current?.focus()}>{word[3]}</div>
+            <div className={`${classes.tile} ${denied ? classes.denied : ""}`} onClick={() => wordInput.current?.focus()}>{word[4]}</div>
         </div>
     )
 }
