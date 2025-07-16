@@ -158,5 +158,20 @@ io.on("connection", (socket)=>{
         rooms[data.roomID].wordsInputted.push(data.word);
         io.to(data.roomID).emit("accept_word", {word: data.word, avatar:players[data.instanceID].avatar, username:players[data.instanceID].username, oxygen: oxadd});
     })
+
+    socket.on("reconnect", (data)=>{
+        socket.rooms.forEach((v)=>{
+            if(v != socket.id){
+                socket.leave(v);
+            }
+        })
+
+    
+        if(!rooms[data.roomID] || [data.roomID] == "" || [data.roomID] == null){
+            return
+        }
+
+        socket.join(data.roomID);
+    })
 })
  

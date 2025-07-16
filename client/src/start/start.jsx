@@ -21,6 +21,9 @@ export default function Start(){
     const [time, setTime] = useState();
 
     useEffect(() => {
+
+        socket.emit("reconnect", {roomID: localStorage.getItem("roomID")});
+
         socket.on("depth_update", ({ depth, oxygen, state }) => {
             setDepth(depth);
             setOxygen(oxygen);
@@ -61,7 +64,7 @@ export default function Start(){
                 <img src={submarine} className={classes.submarine}/>
             </div>
 
-            <div className={classes.map} style={{ transform: `translateY(-${depth}px)`}}>
+            <div className={classes.map} style={{ top: `-${depth}px`}}>
                 <div className={classes.water1}/>
                 <div className={classes.water2}/>
                 <div className={classes.water3}/>

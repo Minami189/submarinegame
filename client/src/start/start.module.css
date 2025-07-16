@@ -49,7 +49,7 @@ body{
 
 .water4 {
   width: 100%;
-  height: 10500px;
+  height: 15500px;
   position: absolute;
   top: 19500px; 
   background-color: black;
@@ -60,7 +60,7 @@ body{
     position: absolute;
     width: 100%;
     height: 35000px; /* total height of all sections */
-    top: 0;
+    top: -2vh;
     left: 0;
     transition: transform 0.5s ease;
     animation: fall 3s ease;
@@ -78,11 +78,11 @@ body{
 
 @keyframes fall{
     0%{
-        transform: translateY(100vh);
+        top: 110vh;
     }
 
     100%{
-        transform: translateY(-0vh);
+        top: -2vh;
     }
 }
 
