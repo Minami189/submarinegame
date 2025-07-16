@@ -150,6 +150,9 @@ io.on("connection", (socket)=>{
 
         const oxadd = Math.floor(Math.random() * 10) + 5
         rooms[data.roomID].oxygen += oxadd;
+        if(rooms[data.roomID].oxygen > 100){
+            rooms[data.roomID].oxygen = 100;
+        }
         rooms[data.roomID].depth += 75;
         rooms[data.roomID].wordsInputted.push(data.word);
         io.to(data.roomID).emit("accept_word", {word: data.word, avatar:players[data.instanceID].avatar, username:players[data.instanceID].username, oxygen: oxadd});
