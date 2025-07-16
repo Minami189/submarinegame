@@ -61,7 +61,6 @@ export default function Tiles({setEffects}){
                 return false;
             }
             const data = await response.json();
-            console.log(data);
             return true;
 
         } catch (error) {

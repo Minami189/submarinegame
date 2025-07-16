@@ -145,11 +145,10 @@ io.on("connection", (socket)=>{
 
         if(foundWord){
             socket.emit("deny");
-            console.log(data.word + " already exists");
             return;
         } 
 
-        const oxadd = Math.floor(Math.random() * 10) + 1
+        const oxadd = Math.floor(Math.random() * 10) + 5
         rooms[data.roomID].oxygen += oxadd;
         rooms[data.roomID].depth += 75;
         rooms[data.roomID].wordsInputted.push(data.word);

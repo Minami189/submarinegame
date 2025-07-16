@@ -24,7 +24,6 @@ export default function Start(){
         socket.on("depth_update", ({ depth, oxygen, state }) => {
             setDepth(depth);
             setOxygen(oxygen);
-            console.log(depth);
         });
 
         socket.on("win", (data)=>{
@@ -56,7 +55,7 @@ export default function Start(){
             <div className={classes.center}>
                 {
                     effects.map((effect)=>{
-                        return(<Effect word={effect.word} avatar={effect.avatar} username={effect.username} oxadd={effect.oxaddd}/>)
+                        return(<Effect word={effect.word} avatar={effect.avatar} username={effect.username} oxadd={effect.oxadd}/>)
                     })
                 }
                 <img src={submarine} className={classes.submarine}/>
