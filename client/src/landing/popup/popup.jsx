@@ -17,6 +17,7 @@ export default function Popoup({showPopup, setShowPopup, setState}){
         socket.on("login", (data)=>{
             localStorage.clear();
             localStorage.setItem("instanceToken", data.instanceToken);
+            setShowPopup(false);
         })
 
         return(()=>{
@@ -44,7 +45,7 @@ export default function Popoup({showPopup, setShowPopup, setState}){
         }
         socket.emit("create_user", {avatar: av, username: username});
         setState("crew");
-        setShowPopup(false);
+        
     }
 
 

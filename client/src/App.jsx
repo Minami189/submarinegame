@@ -22,7 +22,9 @@ function App() {
     //crew - joining and creating crew
     //lobby - when in a crew already
     //start - when game has started
-    
+  useEffect(()=>{
+    console.log("connected to " + process.env.REACT_APP_BACKEND_URL);
+  },[])  
 
   return (
     <AppContext.Provider value={{socket, state, setState, av, setAv, avatars}}>

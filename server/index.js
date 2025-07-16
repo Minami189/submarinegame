@@ -39,6 +39,7 @@ io.on("connection", (socket)=>{
         players[instanceID] = {username: data.username, avatar: data.avatar, instanceID: instanceID};
         const instanceToken = jwt.sign({username: data.username, avatar: data.avatar, instanceID: instanceID}, process.env.PRIVATE_KEY);
         socket.emit("login", {instanceToken: instanceToken});
+        console.log("creating user " + data);
     })
 
     socket.on("create_crew", (data)=>{
