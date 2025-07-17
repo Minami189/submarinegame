@@ -12,19 +12,17 @@ export const AppContext = createContext();
 import av1 from "./assets/av1.png";
 import av2 from "./assets/av2.png";
 import av3 from "./assets/av3.png";
+import av4 from "./assets/av4.png";
 
 function App() {
   const [state, setState] = useState("username");
   const [av, setAv] = useState(0);
-  const avatars = [av1,av2,av3]; 
+  const avatars = [av1,av2,av3, av4]; 
   //states:
     //username - play button to input username
     //crew - joining and creating crew
     //lobby - when in a crew already
     //start - when game has started
-  useEffect(()=>{
-    console.log("connected to " + import.meta.env.VITE_API_URL);
-  },[])  
 
   return (
     <AppContext.Provider value={{socket, state, setState, av, setAv, avatars}}>

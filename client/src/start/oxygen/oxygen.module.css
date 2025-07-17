@@ -21,6 +21,14 @@
     z-index: -1;
 }
 
+.boss{
+    position: absolute;
+    width:100%;
+    background: linear-gradient(#a81515,#460000);
+    transition: height 500ms ease;
+    z-index: -1;
+}
+
 
 .o2text{
     height: 50%;

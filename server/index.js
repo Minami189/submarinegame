@@ -57,6 +57,9 @@ io.on("connection", (socket)=>{
             oxygen: 100,
             host: instanceID,
             timeStarted: Date.now(),
+            boss: 0, // 0 - none | 1 shark - 3hp | 2 squid - 5hp | 3angler - 7hp
+            bossHp: 0,
+            fightingBoss: false, 
             wordsInputted: [],
             players: [{username: players[instanceID].username, avatar: players[instanceID].avatar}],
             state: "lobby",
@@ -85,6 +88,29 @@ io.on("connection", (socket)=>{
                         rooms[roomID].state = "win";
                         clearInterval(rooms[roomID].interval)
                         io.to(roomID).emit("win", {wordCount: rooms[roomID].wordsInputted.length, time: Math.round((Date.now() - rooms[roomID].timeStarted)/1000), wordCount: rooms[roomID].wordsInputted.length});
+                    }
+
+                    // 0 = none, 1 = shark,  2 = squid, 3 angler
+
+                    if(rooms[roomID].depth >= 7000 && rooms[roomID].boss === 0){
+                        rooms[roomID].boss = 1;
+                        rooms[roomID].fightingBoss = true;
+                        rooms[roomID].bossHp = 3;
+                        io.to(roomID).emit("boss", {boss: 1});
+                    }
+
+                    if(rooms[roomID].depth >= 15000 && rooms[roomID].boss === 1){
+                        rooms[roomID].boss = 2;
+                        rooms[roomID].fightingBoss = true;
+                        rooms[roomID].bossHp = 5;
+                        io.to(roomID).emit("boss", {boss: 2});
+                    }
+
+                    if(rooms[roomID].depth >= 24000 && rooms[roomID].boss === 2){
+                        rooms[roomID].boss = 3;
+                        rooms[roomID].fightingBoss = true;
+                        rooms[roomID].bossHp = 7;
+                        io.to(roomID).emit("boss", {boss: 3});
                     }
                 }
 
@@ -142,16 +168,24 @@ io.on("connection", (socket)=>{
         }
 
         const foundWord = rooms[data.roomID].wordsInputted.find((word)=> word === data.word);
-
         if(foundWord){
             socket.emit("deny");
             return;
         } 
 
+        if(rooms[data.roomID].fightingBoss){
+            rooms[data.roomID].bossHp > 0 ? rooms[data.roomID].bossHp -= 1 : null;
+            io.to(data.roomID).emit("damage_boss", {word: data.word, avatar:players[data.instanceID].avatar, username:players[data.instanceID].username, bossHp: rooms[data.roomID].bossHp});
+            if(rooms[data.roomID].bossHp <= 0){
+                rooms[data.roomID].fightingBoss = false;
+                io.to(data.roomID).emit("kill_boss");
+            }
+            return;
+        }
+
         const oxadd = Math.floor(Math.random() * 10) + 5
         rooms[data.roomID].oxygen += oxadd;
         if(rooms[data.roomID].oxygen > 100){
-
             rooms[data.roomID].oxygen = 101;
         }
         rooms[data.roomID].depth += 75;
@@ -165,7 +199,6 @@ io.on("connection", (socket)=>{
                 socket.leave(v);
             }
         })
-
     
         if(!rooms[data.roomID] || [data.roomID] == "" || [data.roomID] == null){
             return

@@ -1,0 +1,84 @@
+.bossBody{
+    height: 70vh;
+    width: 100%;
+    display:flex;
+    justify-content: flex-end;
+    align-items: center;
+    position:absolute;
+}
+
+.bossWrapper{
+    transform: translateX(-5vh);
+    animation: swim 2s ease;
+}
+
+.bossBody img{
+    width: 500px;
+    animation: bobble 15s ease-in-out infinite;
+}
+
+.bossDamage{
+    transform:translateX(0vh);
+    animation: shake 0.3s ease-in-out;
+}
+
+.death{
+    animation: bossDeath 1.5s ease forwards;
+}
+
+@keyframes bossDeath {
+  0% {
+    opacity: 1;
+    transform: translateY(0vh) scale(1);
+  }
+
+  50% {
+    opacity: 0.6;
+    transform: translateY(10vh) scale(0.8);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(30vh) scale(0.2);
+  }
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  50% { transform: translateX(10px); }
+  75% { transform: translateX(-10px); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes swim {
+    0%{
+        transform: translateX(100vh);
+    }
+
+    100%{
+        transform: translateX(-5vh);
+    }
+}
+
+@keyframes bobble{
+    0%{
+        transform: translateY(0vh);
+    }
+
+    25%{
+        transform: translateY(-2vh);
+    }
+
+    50%{
+        transform: translateY(0vh);
+    }
+
+    75%{
+        transform: translateY(2vh);
+    }
+
+    100%{
+        transform: translateY(0vh);
+    }
+}

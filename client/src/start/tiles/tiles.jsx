@@ -6,7 +6,7 @@ import tiles from "../../assets/tiles.mp3"
 import wordSuccess from "../../assets/success.mp3";
 import wordDeny from "../../assets/denied.mp3"
 
-export default function Tiles({setEffects}){
+export default function Tiles({setEffects, setBoss, boss}){
     const [word, setWord] = useState("");    
     const wordInput = useRef();
     const {socket} = useContext(AppContext);
@@ -21,6 +21,7 @@ export default function Tiles({setEffects}){
         socket.on("deny",()=>{
             animateDeny()
         })
+
 
         return(()=>{
             socket.off("accept_word");
@@ -93,11 +94,11 @@ export default function Tiles({setEffects}){
                 <input autoFocus onChange={handleChange} ref={wordInput} maxLength={5} onBlur={()=>setTimeout(() => wordInput.current?.focus(), 100)}/>
             </form>
             
-            <div className={`${classes.tile} ${denied ? classes.denied : ""}`} onClick={() => wordInput.current?.focus()}>{word[0]}</div>
-            <div className={`${classes.tile} ${denied ? classes.denied : ""}`} onClick={() => wordInput.current?.focus()}>{word[1]}</div>
-            <div className={`${classes.tile} ${denied ? classes.denied : ""}`} onClick={() => wordInput.current?.focus()}>{word[2]}</div>
-            <div className={`${classes.tile} ${denied ? classes.denied : ""}`} onClick={() => wordInput.current?.focus()}>{word[3]}</div>
-            <div className={`${classes.tile} ${denied ? classes.denied : ""}`} onClick={() => wordInput.current?.focus()}>{word[4]}</div>
+            <div className={`${classes.tile} ${denied ? classes.denied : ""} ${boss > 0 ? classes.bossFight : ""}`} onClick={() => wordInput.current?.focus()}>{word[0]}</div>
+            <div className={`${classes.tile} ${denied ? classes.denied : ""} ${boss > 0 ? classes.bossFight : ""}`} onClick={() => wordInput.current?.focus()}>{word[1]}</div>
+            <div className={`${classes.tile} ${denied ? classes.denied : ""} ${boss > 0 ? classes.bossFight : ""}`} onClick={() => wordInput.current?.focus()}>{word[2]}</div>
+            <div className={`${classes.tile} ${denied ? classes.denied : ""} ${boss > 0 ? classes.bossFight : ""}`} onClick={() => wordInput.current?.focus()}>{word[3]}</div>
+            <div className={`${classes.tile} ${denied ? classes.denied : ""} ${boss > 0 ? classes.bossFight : ""}`} onClick={() => wordInput.current?.focus()}>{word[4]}</div>
         </div>
     )
 }

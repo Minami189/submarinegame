@@ -59,3 +59,13 @@
     margin-bottom: 0px;
   }
 }
+
+.bossFight{
+  animation: bossShift 5s infinite;
+}
+
+@keyframes bossShift {
+  0% { background-color: #070707; }
+  50% { background-color: #272727; }
+  100% { background-color: #000000; }
+}

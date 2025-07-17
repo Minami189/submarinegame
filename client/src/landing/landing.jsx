@@ -6,6 +6,12 @@ import { useState, useContext, useEffect } from "react";
 import { AppContext } from "../App.jsx";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import ambiance from "../assets/ambiance.mp3";
+const ambianceAudio = new Audio(ambiance);
+ambianceAudio.loop = true;
+ambianceAudio.volume = 0.1;
+//declared audio globally so it doesnt keep making a new audio instance every refresh
+//and
 
 export default function Landing(){
     const [showPopup, setShowPopup] = useState(false);
@@ -14,11 +20,17 @@ export default function Landing(){
     const {socket, state, setState} = useContext(AppContext);
     const navigate = useNavigate()
     
-
     useEffect(()=>{
+        ambianceAudio.pause();
+        ambianceAudio.currentTime = 0;
+
         socket.on("begin", (data)=>{
             setState("start")
             navigate("/start");
+            const playDelay = setTimeout(()=>{
+                ambianceAudio.play();
+                clearTimeout(playDelay);
+            }, 2000)
         })
 
         socket.on("join_lobby", (data)=>{
@@ -28,6 +40,10 @@ export default function Landing(){
             setRoomID(localStorage.getItem("roomID"));
         })
 
+        return(()=>{
+            socket.off("join_lobby");
+            socket.off("begin");
+        })
     }, [])
 
     function handlePlay(){
