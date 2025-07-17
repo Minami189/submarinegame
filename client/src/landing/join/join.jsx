@@ -2,6 +2,8 @@ import classes from "./join.module.css";
 import { useContext, useRef, useEffect } from "react";
 import { AppContext } from "../../App";
 import { jwtDecode } from "jwt-decode";
+import bubbles from "../../assets/bubbles.mp3";
+
 export default function Join({showJoin, setShowJoin, state, setState}){
     const {socket} = useContext(AppContext);
     const roomInput = useRef();
@@ -15,9 +17,12 @@ export default function Join({showJoin, setShowJoin, state, setState}){
         
     },[])
 
+    
     function handleJoin(){
         const roomID = roomInput.current.value;
         const decoded = jwtDecode(localStorage.getItem("instanceToken"));
+        const uiClick = new Audio(bubbles);
+        uiClick.play();
         socket.emit("join_crew", {roomID: roomID, instanceID: decoded.instanceID});
     }
 

@@ -4,6 +4,7 @@ import right from "../../assets/right.png";
 import { useEffect, useRef, useContext, useState } from "react";
 import { AppContext } from "../../App";
 import {jwtDecode} from "jwt-decode";
+import bubbles from "../../assets/bubbles.mp3";
 
 export default function Popoup({showPopup, setShowPopup, setState}){
     const {socket, av, setAv, avatars} = useContext(AppContext);
@@ -26,15 +27,19 @@ export default function Popoup({showPopup, setShowPopup, setState}){
         })
     },[])
 
+    const uiClick = new Audio(bubbles);
+
     function handleLeft(){
         if(av>0){
             setAv(prev=>prev-1);
+            uiClick.play();
         }
     }
 
     function handleRight(){
         if(av < avatars.length-1){
             setAv(prev=>prev+1);
+            uiClick.play();
         }
     }
 
@@ -44,6 +49,7 @@ export default function Popoup({showPopup, setShowPopup, setState}){
             alert("must input username");
             return;
         }
+        uiClick.play();
         socket.emit("create_user", {avatar: av, username: username});
         
     }

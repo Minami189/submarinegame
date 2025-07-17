@@ -7,6 +7,7 @@ import { AppContext } from "../App.jsx";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import ambiance from "../assets/ambiance.mp3";
+import bubbles from "../assets/bubbles.mp3";
 const ambianceAudio = new Audio(ambiance);
 ambianceAudio.loop = true;
 ambianceAudio.volume = 0.1;
@@ -19,7 +20,7 @@ export default function Landing(){
     const [roomID, setRoomID] = useState("");
     const {socket, state, setState} = useContext(AppContext);
     const navigate = useNavigate()
-    
+    const uiClick = new Audio(bubbles);
     useEffect(()=>{
         ambianceAudio.pause();
         ambianceAudio.currentTime = 0;
@@ -27,6 +28,7 @@ export default function Landing(){
         socket.on("begin", (data)=>{
             setState("start")
             navigate("/start");
+            uiClick.play();
             const playDelay = setTimeout(()=>{
                 ambianceAudio.play();
                 clearTimeout(playDelay);
@@ -46,24 +48,29 @@ export default function Landing(){
         })
     }, [])
 
+
+    
     function handlePlay(){
         setShowPopup(true);
+        uiClick.play();
     }
 
     function createCrew(){
         const decoded = jwtDecode(localStorage.getItem("instanceToken"));
-
         socket.emit("create_crew", {instanceID: decoded.instanceID});
+        uiClick.play();
     }
 
     function joinCrew(){
         setShowJoin(true);
+        uiClick.play();
     }
 
     function Release(){
         const roomID = localStorage.getItem("roomID");
         const decoded = jwtDecode(localStorage.getItem("instanceToken"));
         socket.emit("start", {roomID: roomID, instanceID: decoded.instanceID});
+        uiClick.play();
     }
 
     return(  
