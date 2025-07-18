@@ -8,6 +8,7 @@ import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import ambiance from "../assets/ambiance.mp3";
 import bubbles from "../assets/bubbles.mp3";
+import Create from "./create/create.jsx";
 const ambianceAudio = new Audio(ambiance);
 ambianceAudio.loop = true;
 ambianceAudio.volume = 0.1;
@@ -18,7 +19,8 @@ export default function Landing(){
     const [showPopup, setShowPopup] = useState(false);
     const [showJoin, setShowJoin] = useState(false);
     const [roomID, setRoomID] = useState("");
-    const {socket, state, setState} = useContext(AppContext);
+    const [showCreate, setShowCreate] = useState(false);
+    const {socket, state, setState, setDifficulty} = useContext(AppContext);
     const navigate = useNavigate()
     const uiClick = new Audio(bubbles);
     useEffect(()=>{
@@ -37,9 +39,11 @@ export default function Landing(){
 
         socket.on("join_lobby", (data)=>{
             setShowJoin(false);
+            setShowCreate(false);
             setState("lobby");
             localStorage.setItem("roomID", data.roomID);
             setRoomID(localStorage.getItem("roomID"));
+            setDifficulty(data.difficulty);
         })
 
         return(()=>{
@@ -56,8 +60,7 @@ export default function Landing(){
     }
 
     function createCrew(){
-        const decoded = jwtDecode(localStorage.getItem("instanceToken"));
-        socket.emit("create_crew", {instanceID: decoded.instanceID});
+        setShowCreate(true);
         uiClick.play();
     }
 
@@ -70,17 +73,17 @@ export default function Landing(){
         const roomID = localStorage.getItem("roomID");
         const decoded = jwtDecode(localStorage.getItem("instanceToken"));
         socket.emit("start", {roomID: roomID, instanceID: decoded.instanceID});
-        uiClick.play();
     }
 
     return(  
         <div className={classes.background}>
             <Popup showPopup={showPopup} setShowPopup={setShowPopup} state={state} setState={setState}/>
             <Join showJoin={showJoin} setShowJoin={setShowJoin} state={state} setState={setState}/>
+            <Create showCreate={showCreate} setShowCreate={setShowCreate}/>
             <div className={classes.header}>
                 <div className={state !== "lobby" ? null : classes.hidden}>
                     <h1>Made by</h1>
-                    <h2>Ien Sagmit</h2>
+                    <a href={"mailto:Soon128HD@gmail.com"}><h2>Ien Sagmit</h2></a>
                 </div>
 
                 <div className={state === "lobby" ? null : classes.hidden}>

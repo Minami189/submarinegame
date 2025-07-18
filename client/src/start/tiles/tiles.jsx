@@ -6,11 +6,12 @@ import tiles from "../../assets/tiles.mp3"
 import wordSuccess from "../../assets/success.mp3";
 import wordDeny from "../../assets/denied.mp3"
 
-export default function Tiles({setEffects, setBoss, boss}){
+export default function Tiles({setEffects, setBoss, boss, over, setOver, difficulty}){
     const [word, setWord] = useState("");    
     const wordInput = useRef();
     const {socket} = useContext(AppContext);
     const [denied, setDenied] = useState(false);
+    const [length, setLength] = useState(5);
     useEffect(()=>{
         socket.on("accept_word", (data)=>{
             const successSound = new Audio(wordSuccess);
@@ -22,6 +23,12 @@ export default function Tiles({setEffects, setBoss, boss}){
             animateDeny()
         })
 
+       
+        setLength(prev=> difficulty == 0 ? 3 : prev);
+        setLength(prev=> difficulty == 1 ? 4 : prev);
+        setLength(prev=> difficulty >= 2 ? 5 : prev);
+        
+        
 
         return(()=>{
             socket.off("accept_word");
@@ -41,12 +48,14 @@ export default function Tiles({setEffects, setBoss, boss}){
 
     async function handleSubmit(event){
         event.preventDefault();
-
         const real = await wordCheck(word);
-        if(word.length < 5 || real == false){
+        
+
+        if(word.length < length || !real){
             animateDeny();
             return;
         } 
+        
         const deoded = jwtDecode(localStorage.getItem("instanceToken"));
         socket.emit("send_word", {word: word, roomID: localStorage.getItem("roomID"), instanceID: deoded.instanceID});
         wordInput.current.value = "";
@@ -54,6 +63,8 @@ export default function Tiles({setEffects, setBoss, boss}){
     }
 
     async function wordCheck(word) {
+        
+
         try {
             const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
 
@@ -91,14 +102,14 @@ export default function Tiles({setEffects, setBoss, boss}){
                                                                 opacity: 0,
                                                                 fontSize: 16, 
                                                                 zIndex: 0,}}>
-                <input autoFocus onChange={handleChange} ref={wordInput} maxLength={5} onBlur={()=>setTimeout(() => wordInput.current?.focus(), 100)}/>
+                <input autoFocus disabled={over} onChange={handleChange} ref={wordInput} maxLength={5} onBlur={()=>setTimeout(() => wordInput.current?.focus(), 100)}/>
             </form>
             
             <div className={`${classes.tile} ${denied ? classes.denied : ""} ${boss > 0 ? classes.bossFight : ""}`} onClick={() => wordInput.current?.focus()}>{word[0]}</div>
             <div className={`${classes.tile} ${denied ? classes.denied : ""} ${boss > 0 ? classes.bossFight : ""}`} onClick={() => wordInput.current?.focus()}>{word[1]}</div>
             <div className={`${classes.tile} ${denied ? classes.denied : ""} ${boss > 0 ? classes.bossFight : ""}`} onClick={() => wordInput.current?.focus()}>{word[2]}</div>
-            <div className={`${classes.tile} ${denied ? classes.denied : ""} ${boss > 0 ? classes.bossFight : ""}`} onClick={() => wordInput.current?.focus()}>{word[3]}</div>
-            <div className={`${classes.tile} ${denied ? classes.denied : ""} ${boss > 0 ? classes.bossFight : ""}`} onClick={() => wordInput.current?.focus()}>{word[4]}</div>
+            <div className={`${classes.tile} ${length < 4 ?  classes.gold : ""} ${denied ? classes.denied : ""} ${boss > 0 ? classes.bossFight : ""}`} onClick={() => wordInput.current?.focus()}>{word[3]}</div>
+            <div className={`${classes.tile} ${length < 5 ?  classes.gold : ""} ${denied ? classes.denied : ""} ${boss > 0 ? classes.bossFight : ""}`} onClick={() => wordInput.current?.focus()}>{word[4]}</div>
         </div>
     )
 }

@@ -17,6 +17,7 @@ import av4 from "./assets/av4.png";
 function App() {
   const [state, setState] = useState("username");
   const [av, setAv] = useState(0);
+  const [difficulty, setDifficulty] = useState();
   const avatars = [av1,av2,av3, av4]; 
   //states:
     //username - play button to input username
@@ -25,7 +26,7 @@ function App() {
     //start - when game has started
 
   return (
-    <AppContext.Provider value={{socket, state, setState, av, setAv, avatars}}>
+    <AppContext.Provider value={{socket, state, setState, av, setAv, avatars, difficulty, setDifficulty}}>
       <BrowserRouter>
         <Routes>
           <Route index element={<Landing/>}/>

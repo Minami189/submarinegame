@@ -33,11 +33,16 @@
   100% { transform: translateX(0); }
 }
 
+.gold{
+  background: linear-gradient(rgb(255, 217, 0), rgb(182, 158, 23));
+}
+
 .denied {
   animation: shake 0.4s ease;
   border: solid rgb(94, 2, 2) 4px;
   background: linear-gradient(rgb(160, 2, 2), rgb(134, 27, 27));
 }
+
 
 @media only screen and (min-device-width: 1024px) and (max-device-width: 1366px) {
   input {
@@ -46,8 +51,8 @@
 
   .tilesWrapper{
     position: absolute;
-    height: 70vh;
-    width: 90%;
+    height: 62vh;
+    width: 95%;
     display:flex;
     flex-direction: column;
     justify-content:center;
@@ -57,15 +62,20 @@
 
   .tile{
     margin-bottom: 0px;
+    width: 50px;
+    height: 50px;
+    font-size: 2rem;
   }
 }
 
-.bossFight{
-  animation: bossShift 5s infinite;
-}
 
 @keyframes bossShift {
-  0% { background-color: #070707; }
-  50% { background-color: #272727; }
-  100% { background-color: #000000; }
+  0% { background-color: #000000d5; }
+  50% { background-color: #797979; }
+  100% { background-color: #000000d7; }
+}
+
+
+.bossFight{
+  animation: bossShift 5s infinite;
 }

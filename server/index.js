@@ -57,16 +57,18 @@ io.on("connection", (socket)=>{
             oxygen: 100,
             host: instanceID,
             timeStarted: Date.now(),
-            boss: 0, // 0 - none | 1 shark - 3hp | 2 squid - 5hp | 3angler - 7hp
+            boss: 0, // 0 none | 1 shark | 2 squid  | 3 angler
             bossHp: 0,
+            difficulty: data.difficulty, // 0 - easy, 1 - medium , 2 - hard, 3 - extreme
             fightingBoss: false, 
             wordsInputted: [],
+            playerWordCount: [],
             players: [{username: players[instanceID].username, avatar: players[instanceID].avatar}],
             state: "lobby",
             depth: 0,
             interval: setInterval(()=>{
-                if(rooms[roomID].started){
-                    rooms[roomID].depth += 40;
+                if(rooms[roomID].started && rooms[roomID].state != "lose" && rooms[roomID].state != "win"){
+                    !rooms[roomID].fightingBoss ? rooms[roomID].depth += 40 : null;
                     rooms[roomID].oxygen -= 1;
                     if(rooms[roomID].oxygen <= 0){
                         rooms[roomID].state = "lose"
@@ -77,39 +79,64 @@ io.on("connection", (socket)=>{
                         oxygen: rooms[roomID].oxygen,
                         state: rooms[roomID].state
                     });
-
+                    
+                    
                     if(rooms[roomID].oxygen <= 0) {
                         rooms[roomID].state = "lose";
                         clearInterval(rooms[roomID].interval)
-                        io.to(roomID).emit("lose", {wordCount: rooms[roomID].wordsInputted.length, depth: rooms[roomID].depth});
+                        io.to(roomID).emit("lose", {wordCount: rooms[roomID].wordsInputted.length, depth: rooms[roomID].depth, playerWordCount: rooms[roomID].playerWordCount});
                     }
 
                     if(rooms[roomID].depth >= 30000){
                         rooms[roomID].state = "win";
                         clearInterval(rooms[roomID].interval)
-                        io.to(roomID).emit("win", {wordCount: rooms[roomID].wordsInputted.length, time: Math.round((Date.now() - rooms[roomID].timeStarted)/1000), wordCount: rooms[roomID].wordsInputted.length});
+                        io.to(roomID).emit("win", {wordCount: rooms[roomID].wordsInputted.length, time: Math.round((Date.now() - rooms[roomID].timeStarted)/1000), wordCount: rooms[roomID].wordsInputted.length,
+                            playerWordCount: rooms[roomID].playerWordCount
+                        });
                     }
 
                     // 0 = none, 1 = shark,  2 = squid, 3 angler
-
+                    let sharkHp;
+                    let squidHp;
+                    let anglerHp;
+                    if(rooms[roomID].difficulty == 0){
+                        sharkHp = 3;
+                        squidHp = 4;
+                        anglerHp = 5;
+                    }
+                    if(rooms[roomID].difficulty == 1){
+                        sharkHp = 3;
+                        squidHp = 5;
+                        anglerHp = 7;
+                    }
+                    if(rooms[roomID].difficulty == 2){
+                        sharkHp = 5;
+                        squidHp = 7;
+                        anglerHp = 10;
+                    }
+                    if(rooms[roomID].difficulty == 3){
+                        sharkHp = 5;
+                        squidHp = 10;
+                        anglerHp = 15;
+                    }
                     if(rooms[roomID].depth >= 7000 && rooms[roomID].boss === 0){
                         rooms[roomID].boss = 1;
                         rooms[roomID].fightingBoss = true;
-                        rooms[roomID].bossHp = 3;
+                        rooms[roomID].bossHp = sharkHp;
                         io.to(roomID).emit("boss", {boss: 1});
                     }
 
                     if(rooms[roomID].depth >= 15000 && rooms[roomID].boss === 1){
                         rooms[roomID].boss = 2;
                         rooms[roomID].fightingBoss = true;
-                        rooms[roomID].bossHp = 5;
+                        rooms[roomID].bossHp = squidHp;
                         io.to(roomID).emit("boss", {boss: 2});
                     }
 
                     if(rooms[roomID].depth >= 24000 && rooms[roomID].boss === 2){
                         rooms[roomID].boss = 3;
                         rooms[roomID].fightingBoss = true;
-                        rooms[roomID].bossHp = 7;
+                        rooms[roomID].bossHp = anglerHp;
                         io.to(roomID).emit("boss", {boss: 3});
                     }
                 }
@@ -119,9 +146,11 @@ io.on("connection", (socket)=>{
             }, 500)
         }
         socket.join(roomID);
-        socket.emit("join_lobby", {roomID: roomID});
+        socket.emit("join_lobby", {roomID: roomID, difficulty: rooms[roomID].difficulty});
         console.log(rooms[roomID]);
     })
+
+   
 
     socket.on("join_crew", (data)=>{
         const instanceID = data.instanceID;
@@ -167,7 +196,7 @@ io.on("connection", (socket)=>{
             return
         }
 
-        const foundWord = rooms[data.roomID].wordsInputted.find((word)=> word === data.word);
+        const foundWord = rooms[data.roomID].wordsInputted.find((word)=> word.word === data.word);
         if(foundWord){
             socket.emit("deny");
             return;
@@ -178,18 +207,37 @@ io.on("connection", (socket)=>{
             io.to(data.roomID).emit("damage_boss", {word: data.word, avatar:players[data.instanceID].avatar, username:players[data.instanceID].username, bossHp: rooms[data.roomID].bossHp});
             if(rooms[data.roomID].bossHp <= 0){
                 rooms[data.roomID].fightingBoss = false;
+                rooms[data.roomID].oxygen += 20;
                 io.to(data.roomID).emit("kill_boss");
             }
             return;
         }
+        const roomDifficulty = rooms[data.roomID].difficulty;
+        let oxygenCap;
 
-        const oxadd = Math.floor(Math.random() * 10) + 5
+        if(roomDifficulty == 0) oxygenCap = 15
+        if(roomDifficulty == 1) oxygenCap = 10
+        if(roomDifficulty == 2) oxygenCap = 10
+        if(roomDifficulty == 3) oxygenCap = 8
+        
+        //reducing the oxygen cap so it actually is the cap because we plus the 5 or 3 yessir
+        const oxadd = Math.floor(Math.random() * ( oxygenCap-(roomDifficulty == 3 ? 3 : 5) )) + (roomDifficulty == 3 ? 3 : 5 )//extreme difficulty minimum ox is 3
+
         rooms[data.roomID].oxygen += oxadd;
         if(rooms[data.roomID].oxygen > 100){
             rooms[data.roomID].oxygen = 101;
         }
         rooms[data.roomID].depth += 75;
-        rooms[data.roomID].wordsInputted.push(data.word);
+        rooms[data.roomID].wordsInputted.push({word: data.word});
+
+        const findIndex = rooms[data.roomID].playerWordCount.findIndex((player)=>player.instanceID == data.instanceID);
+        if(findIndex > -1){
+            rooms[data.roomID].playerWordCount[findIndex].count += 1; 
+        }else{
+            rooms[data.roomID].playerWordCount.push({instanceID: data.instanceID, count: 1, username:players[data.instanceID].username, avatar: players[data.instanceID].avatar})  
+        }
+        
+        
         io.to(data.roomID).emit("accept_word", {word: data.word, avatar:players[data.instanceID].avatar, username:players[data.instanceID].username, oxygen: oxadd});
     })
 
@@ -205,6 +253,7 @@ io.on("connection", (socket)=>{
         }
 
         socket.join(data.roomID);
+        socket.emit("update_state", {state:rooms[data.roomID].state})
     })
 })
  

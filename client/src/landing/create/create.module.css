@@ -1,12 +1,12 @@
 .popupBody{
-    width: 200px;
-    height: 250px;
+    width: 150px;
+    height: 200px;
     background-color: #1C3363;
     display:flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 25px;
+    gap: 10px;
     border-radius: 15px;
     animation: popup 0.3s;
 }
@@ -23,18 +23,6 @@
 }
 
 
-.popupBody input{
-    width: 65%;
-    height: 15%;
-    border-radius: 15px;
-    border: solid 3px #D9D9D9;
-    background-color: transparent;
-    text-align: center;
-    color: #D9D9D9;
-    font-weight: normal;
-    font-size: 1.2rem;
-    padding: 5px 15px 5px 15px;
-}
 
 @keyframes popup {
     0%{
@@ -50,11 +38,12 @@
     background-color: #D9D9D9;
     color:#1C3363;
     font-family: Inter;
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: bold;
     border:none;
-    padding: 10px 35px 10px 35px;
+    padding: 5px 15px 5px 15px;
     border-radius: 10px;
     cursor:pointer;
+    width: 100px;
 }
 

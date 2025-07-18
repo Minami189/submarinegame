@@ -9,11 +9,14 @@ import Lost from "./lost/lost.jsx";
 import Win from "./win/win.jsx";
 import Boss from "./boss/boss.jsx";
 import boss from "../assets/boss.mp3"
+import { useNavigate } from "react-router-dom";
+
+
 const bossMusic = new Audio(boss);
 
 export default function Start(){
 
-    const { socket } = useContext(AppContext);
+    const { socket, difficulty, setDifficulty} = useContext(AppContext);
     const [depth, setDepth] = useState(0);
     const [oxygen, setOxygen] = useState(100);
     const [effects, setEffects] = useState([]);
@@ -23,10 +26,19 @@ export default function Start(){
     const [win, setWin] = useState(false);
     const [time, setTime] = useState();
     const [boss, setBoss] = useState(0);
+    const [over, setOver] = useState(false);
+    const [pWordCount, setPWordCount] = useState([]);
 
+    const navigate = useNavigate();
     useEffect(() => {
 
         socket.emit("reconnect", {roomID: localStorage.getItem("roomID")});
+        
+        socket.on("update_state", (data)=>{
+            if(data.state == "win" || data.state == "lose"){
+                navigate('/');
+            }
+        })
 
         socket.on("depth_update", ({ depth, oxygen, state }) => {
             setDepth(depth);
@@ -37,18 +49,22 @@ export default function Start(){
             setWordCount(data.wordCount);
             setTime(data.time);
             setWin(true);
+            setPWordCount(data.playerWordCount);
             bossMusic.currentTime = 0;
             bossMusic.loop = false;
             bossMusic.pause();
+            setOver(true);
         })
 
         socket.on("lose", (data)=>{
-            setLastDepth(data.depth);
+            setLastDepth(Math.floor(data.depth/8));
             setWordCount(data.wordCount);
             setLost(true);
+            setPWordCount(data.playerWordCount);
             bossMusic.currentTime = 0;
             bossMusic.loop = false;
             bossMusic.pause();
+            setOver(true);
         })
 
         socket.on("boss", (data)=>{
@@ -62,6 +78,7 @@ export default function Start(){
             socket.off("depth_update");
             socket.off("win");
             socket.off("lose");
+            socket.off("update_state")
         };
 
     }, []);
@@ -70,8 +87,8 @@ export default function Start(){
 
     return(
         <div className={classes.background}>
-            <Win win={win} wordCount={wordCount} time={time}/>
-            <Lost lost={lost}  lastDepth={lastDepth} wordCount={wordCount}/>
+            <Win win={win} wordCount={wordCount} time={time} pWordCount={pWordCount} difficulty={difficulty}/>
+            <Lost lost={lost}  lastDepth={lastDepth} wordCount={wordCount} pWordCount={pWordCount} difficulty={difficulty}/>
             <Oxygen oxygen={oxygen} boss={boss}/>
             <div className={classes.center}>
                 {
@@ -79,17 +96,22 @@ export default function Start(){
                         return(<Effect word={effect.word} avatar={effect.avatar} username={effect.username} oxadd={effect.oxadd}/>)
                     })
                 }
+                <div className={classes.depth} style={ boss > 0 ? {color:"maroon"} : {}}>
+                    {`${depth >= 100 ? Math.floor(depth/8) : 0}m`}
+                </div>
                 <img src={submarine} className={classes.submarine}/>
             </div>
+          
+            
 
             <div className={classes.map} style={{ top: `-${depth}px`}}>
-                <div className={classes.water1}/>
-                <div className={classes.water2}/>
-                <div className={classes.water3}/>
-                <div className={classes.water4}/>
+                <div className={classes.water1}></div>
+                <div className={classes.water2}></div>
+                <div className={classes.water3}></div>
+                <div className={classes.water4}></div>
             </div>
             <Boss boss={boss} setBoss={setBoss} bossMusic={bossMusic}/>
-            <Tiles setEffects={setEffects} setBoss={setBoss} boss={boss}/>
+            <Tiles setEffects={setEffects} setBoss={setBoss} boss={boss} over={over} setOver={setOver} difficulty={difficulty}/>
         </div>
     )
 }

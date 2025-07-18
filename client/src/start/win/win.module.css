@@ -11,13 +11,15 @@
 
 .winBody{
     background-color: #E8E8D7;
-    width: 20%;
-    height: 45%;
+    min-width: 350px;
+    min-height: 350px;
     display:flex;
-    align-items: center;
-    justify-content: space-evenly;
     flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
     border-radius: 25px;
+    padding: 15px 10px 25px 10px;
+    position:relative;
 }
 
 .blueButton{
@@ -33,6 +35,8 @@
     height: 3rem;
     text-align: center;
     cursor: pointer;
+    position: absolute;
+    bottom:15px;
 }
 
 .blueButton{
@@ -66,4 +70,49 @@
     font-family: Inter;
     font-weight: normal;
     font-size: 1.25rem;
+}
+
+.playerWC{
+    padding: 35px 10px 25px 10px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    height:50%;
+    gap:10px;
+    overflow-y: scroll;
+    scrollbar-width: none;
+}
+
+.statWrapper{
+    background-color: #1C3363;
+    margin: 0px;
+    padding: 5px 10px 5px 10px;
+    display:flex;
+    gap: 5px;
+    align-items: center;
+    height: 35px;
+    border-radius: 15px;
+}
+
+.statContent{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.statContent p, .statContent h4{
+    margin: 0px;
+    line-height: 15px;
+    font-family: Inter;
+    color: #e0e0d5;
+}
+
+.statContent p{
+    font-size: 0.7rem;
+    font-weight: normal;
+}
+
+.lostBody h2{
+    margin: 0px;
+    line-height: 35px;
 }

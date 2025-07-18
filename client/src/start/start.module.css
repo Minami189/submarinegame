@@ -20,7 +20,14 @@ body{
     align-items: center;
 }
 
+.smallFish{
+    width: 50px;
+}
 
+.school{
+    width:100%;
+    height: 25%;
+}
 
 .water1 {
   width: 100%;
@@ -29,21 +36,28 @@ body{
   border-top: solid white 10px;
   top: -10px;
   background: linear-gradient(#03E3FC, #008A99);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .water2 {
   width: 100%;
   height: 6500px;
   position: absolute;
-  top: 5500px; 
+  top: 5490px; 
   background: linear-gradient(#008A99, #00567B);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .water3 {
   width: 100%;
   height: 7500px;
   position: absolute;
-  top: 12000px; 
+  top: 11980px; 
   background: linear-gradient(#00567B, #000000);
 }
 
@@ -51,7 +65,7 @@ body{
   width: 100%;
   height: 15500px;
   position: absolute;
-  top: 19500px; 
+  top: 19450px; 
   background-color: black;
 }
 
@@ -113,4 +127,18 @@ body{
     100%{
         transform: rotateZ(0deg) translate(-50%, 0vh);
     }
+}
+
+.depth{
+    width: 90%;
+    height: 80%;
+    z-index: 5;
+    display:flex;
+    justify-content: center;
+    font-family: Inter;
+    font-weight: bold;
+    justify-content: flex-end;
+    align-items: flex-start;
+    font-size: 2rem;
+    color:white;
 }
