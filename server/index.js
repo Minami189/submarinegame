@@ -54,7 +54,7 @@ io.on("connection", (socket)=>{
         rooms[roomID] = {
             roomID: roomID,
             started: false,
-            oxygen: 100,
+            oxygen: 5,
             host: instanceID,
             timeStarted: Date.now(),
             boss: 0, // 0 none | 1 shark | 2 squid  | 3 angler

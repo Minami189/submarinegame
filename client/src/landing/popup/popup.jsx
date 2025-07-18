@@ -3,83 +3,71 @@ import left from "../../assets/left.png";
 import right from "../../assets/right.png";
 import { useEffect, useRef, useContext, useState } from "react";
 import { AppContext } from "../../App";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import bubbles from "../../assets/bubbles.mp3";
 
-export default function Popoup({showPopup, setShowPopup, setState}){
-    const {socket, av, setAv, avatars} = useContext(AppContext);
+export default function Popoup({ showPopup, setShowPopup, setState }) {
+    const { socket, av, setAv, avatars } = useContext(AppContext);
+    const [username, setUsername] = useState("");
 
-
-
-    const userInput = useRef("");
-
-    useEffect(()=>{
-        
-        socket.on("login", (data)=>{
+    useEffect(() => {
+        socket.on("login", (data) => {
             localStorage.clear();
             localStorage.setItem("instanceToken", data.instanceToken);
             setShowPopup(false);
             setState("crew");
-        })
+        });
 
-        if(localStorage.getItem("instanceToken")){
+        if (localStorage.getItem("instanceToken")) {
             const decoded = jwtDecode(localStorage.getItem("instanceToken"));
-           
-            
             setAv(decoded.avatar);
+            setUsername(decoded.username);
         }
 
-        return(()=>{
+        return () => {
             socket.off("login");
-        })
-    }, [])
+        };
+    }, []);
 
     const uiClick = new Audio(bubbles);
 
-    function handleLeft(){
-        if(av>0){
-            setAv(prev=>prev-1);
+    function handleLeft() {
+        if (av > 0) {
+            setAv((prev) => prev - 1);
             uiClick.play();
         }
     }
 
-    function handleRight(){
-        if(av < avatars.length-1){
-            setAv(prev=>prev+1);
+    function handleRight() {
+        if (av < avatars.length - 1) {
+            setAv((prev) => prev + 1);
             uiClick.play();
         }
     }
 
-    function handleConfirm(){
-        const username = userInput.current.value;
-        if(username == ""){
+    function handleConfirm() {
+        if (username.trim() === "") {
             alert("must input username");
             return;
         }
         uiClick.play();
-        socket.emit("create_user", {avatar: av, username: username});
-        
+        socket.emit("create_user", { avatar: av, username: username.trim() });
     }
 
+    if (!showPopup) return null;
 
-    if(!showPopup){
-        return null;
-    }
-    return(
+    return (
         <div className={classes.backdrop}>
-            <div onClick={()=>setShowPopup(false)} style={{position:"absolute",height:"100%",width:"100%", zIndex:-1}}/>
+            <div onClick={() => setShowPopup(false)} style={{ position: "absolute", height: "100%", width: "100%", zIndex: -1 }} />
             <div className={classes.popupBody}>
-
                 <div className={classes.avatarWrapper}>
-                    <img src={left} onClick={handleLeft} className={classes.uiImage}/>
-                    <img src={avatars[av]} className={classes.avatarImage}/>
-                    <img src={right} onClick={handleRight} className={classes.uiImage}/>
+                    <img src={left} onClick={handleLeft} className={classes.uiImage} />
+                    <img src={avatars[av]} className={classes.avatarImage} />
+                    <img src={right} onClick={handleRight} className={classes.uiImage} />
                 </div>
-
-                <input maxLength={15} ref={userInput} placeholder="username" value={localStorage.getItem("instanceToken") ? jwtDecode(localStorage.getItem("instanceToken")).username : "" }/>
+                <input maxLength={15} value={username} onChange={(e) => setUsername(e.target.value)} placeholder="username"/>
                 <button onClick={handleConfirm} className={classes.whiteButton}>Confirm</button>
             </div>
         </div>
-        
-    )
+    );
 }
