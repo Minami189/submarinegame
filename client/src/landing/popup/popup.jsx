@@ -22,10 +22,19 @@ export default function Popoup({showPopup, setShowPopup, setState}){
             setState("crew");
         })
 
+        if(localStorage.getItem("instanceToken")){
+            const decoded = jwtDecode(localStorage.getItem("instanceToken"));
+            if(userInput.current) {
+                userInput.current.value = decoded.username
+            };
+            console.log(decoded.username)
+            setAv(decoded.avatar);
+        }
+
         return(()=>{
             socket.off("login");
         })
-    },[])
+    })
 
     const uiClick = new Audio(bubbles);
 

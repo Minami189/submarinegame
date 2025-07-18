@@ -72,7 +72,7 @@ export default function Tiles({setEffects, setBoss, boss, over, setOver, difficu
                 //apperantly when word is not real it errors so yes
                 return false;
             }
-            const data = await response.json();
+            
             return true;
 
         } catch (error) {

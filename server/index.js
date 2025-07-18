@@ -174,7 +174,7 @@ io.on("connection", (socket)=>{
         rooms[data.roomID].players.push({username: players[instanceID].username, avatar: players[instanceID].avatar});
         console.log(rooms[data.roomID].players);
         socket.join(data.roomID);
-        socket.emit("join_lobby", {roomID: data.roomID});
+        socket.emit("join_lobby", {roomID: data.roomID, difficulty: rooms[data.roomID].difficulty});
     })
 
     socket.on("start", (data)=>{

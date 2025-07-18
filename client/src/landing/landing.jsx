@@ -27,6 +27,10 @@ export default function Landing(){
         ambianceAudio.pause();
         ambianceAudio.currentTime = 0;
 
+        
+        setState("username");
+        
+
         socket.on("begin", (data)=>{
             setState("start")
             navigate("/start");
@@ -44,6 +48,7 @@ export default function Landing(){
             localStorage.setItem("roomID", data.roomID);
             setRoomID(localStorage.getItem("roomID"));
             setDifficulty(data.difficulty);
+            console.log(data.difficulty);
         })
 
         return(()=>{

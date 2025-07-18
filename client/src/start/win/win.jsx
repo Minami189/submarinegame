@@ -27,8 +27,9 @@ export default function Win({time, win, wordCount, pWordCount, difficulty}){
     return(
         <div className={classes.backdrop}>
             <div className={classes.winBody}>
-                <h2>You Reached the End!</h2>
-                <h1>🚩{time} seconds</h1>
+                <h2>You Reached</h2> 
+                <h2>the End!</h2>
+                <h1 style={{marginTop: "15px"}}>🚩{time} seconds</h1>
                 <h1 style={{marginTop: "5px"}}>{currDiff}</h1>
                 {
                     pWordCount.map((p)=>{

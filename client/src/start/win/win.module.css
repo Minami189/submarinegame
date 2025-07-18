@@ -90,6 +90,7 @@
     gap: 5px;
     align-items: center;
     height: 35px;
+    width: 80%;
     border-radius: 15px;
 }
 
@@ -112,7 +113,8 @@
     font-weight: normal;
 }
 
-.lostBody h2{
+.winBody h2{
     margin: 0px;
     line-height: 35px;
 }
+
