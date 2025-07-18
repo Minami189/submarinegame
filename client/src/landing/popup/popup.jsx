@@ -14,7 +14,7 @@ export default function Popoup({showPopup, setShowPopup, setState}){
     const userInput = useRef("");
 
     useEffect(()=>{
-       
+        
         socket.on("login", (data)=>{
             localStorage.clear();
             localStorage.setItem("instanceToken", data.instanceToken);
@@ -24,17 +24,15 @@ export default function Popoup({showPopup, setShowPopup, setState}){
 
         if(localStorage.getItem("instanceToken")){
             const decoded = jwtDecode(localStorage.getItem("instanceToken"));
-            if(userInput.current) {
-                userInput.current.value = decoded.username
-            };
-            console.log(decoded.username)
+           
+            
             setAv(decoded.avatar);
         }
 
         return(()=>{
             socket.off("login");
         })
-    })
+    }, [])
 
     const uiClick = new Audio(bubbles);
 
@@ -78,7 +76,7 @@ export default function Popoup({showPopup, setShowPopup, setState}){
                     <img src={right} onClick={handleRight} className={classes.uiImage}/>
                 </div>
 
-                <input maxLength={15} ref={userInput} placeholder="username"/>
+                <input maxLength={15} ref={userInput} placeholder="username" value={localStorage.getItem("instanceToken") ? jwtDecode(localStorage.getItem("instanceToken")).username : "" }/>
                 <button onClick={handleConfirm} className={classes.whiteButton}>Confirm</button>
             </div>
         </div>

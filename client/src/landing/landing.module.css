@@ -98,5 +98,8 @@ a{
 .bottom{
     position:absolute;
     transform:translateY(70px);
+    width: 100%;
+    display:flex;
+    justify-content: center;
 }
 
