@@ -7,6 +7,8 @@ import { AppContext } from "../../App";
 import { useContext, useState } from "react";
 import thud from "../../assets/thud.mp3";
 import DamageEff from "./damageEff/damageeff";
+
+
 const damageBoss = new Audio(thud);
 
 

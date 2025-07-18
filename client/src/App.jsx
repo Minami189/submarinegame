@@ -13,12 +13,19 @@ import av1 from "./assets/av1.png";
 import av2 from "./assets/av2.png";
 import av3 from "./assets/av3.png";
 import av4 from "./assets/av4.png";
+import av5 from "./assets/av5.png";
+import av6 from "./assets/av6.png";
+import av7 from "./assets/av7.png";
+import av8 from "./assets/av8.png";
+import av9 from "./assets/av9.png";
+import av10 from "./assets/av10.png";
+
 
 function App() {
   const [state, setState] = useState("username");
   const [av, setAv] = useState(0);
   const [difficulty, setDifficulty] = useState();
-  const avatars = [av1,av2,av3, av4]; 
+  const avatars = [av1,av2,av3,av4,av5,av6,av7,av8,av9,av10]; 
   //states:
     //username - play button to input username
     //crew - joining and creating crew

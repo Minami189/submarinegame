@@ -119,6 +119,7 @@ io.on("connection", (socket)=>{
                         squidHp = 10;
                         anglerHp = 15;
                     }
+                    
                     if(rooms[roomID].depth >= 7000 && rooms[roomID].boss === 0){
                         rooms[roomID].boss = 1;
                         rooms[roomID].fightingBoss = true;
