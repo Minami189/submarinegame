@@ -6,11 +6,12 @@ import { AppContext } from "../../App";
 import { jwtDecode } from "jwt-decode";
 import bubbles from "../../assets/bubbles.mp3";
 
-export default function Popoup({ showPopup, setShowPopup, setState }) {
+export default function Popoup({ showPopup, setShowPopup, setState, loading, setLoading }) {
     const { socket, av, setAv, avatars } = useContext(AppContext);
     const [username, setUsername] = useState("");
+    
 
-    useEffect(() => {
+    useEffect(() => {   
         socket.on("login", (data) => {
             localStorage.clear();
             localStorage.setItem("instanceToken", data.instanceToken);
@@ -52,12 +53,21 @@ export default function Popoup({ showPopup, setShowPopup, setState }) {
         }
         uiClick.play();
         socket.emit("create_user", { avatar: av, username: username.trim() });
+        setLoading(true);
     }
 
     if (!showPopup) return null;
 
     return (
         <div className={classes.backdrop}>
+            <div className={classes.backdrop} style={loading ?  {display:"flex"} : {display:"none"}}>
+                <div className={classes.loading}>
+                    <h1>Loading...</h1>
+                    <h1>The server is slow at this time</h1>
+                    <h2>Try refreshing later</h2>
+                </div>
+                
+            </div>
             <div onClick={() => setShowPopup(false)} style={{ position: "absolute", height: "100%", width: "100%", zIndex: -1 }} />
             <div className={classes.popupBody}>
                 <div className={classes.avatarWrapper}>

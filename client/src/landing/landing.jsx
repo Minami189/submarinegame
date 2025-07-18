@@ -23,6 +23,7 @@ export default function Landing(){
     const [showCreate, setShowCreate] = useState(false);
     const {socket, state, setState, setDifficulty} = useContext(AppContext);
     const [openInstructions, setOpenInstructions] = useState(false);
+    const [loading , setLoading] = useState(false);
     const navigate = useNavigate()
     
     useEffect(()=>{
@@ -51,6 +52,7 @@ export default function Landing(){
             setRoomID(localStorage.getItem("roomID"));
             setDifficulty(data.difficulty);
             console.log(data.difficulty);
+            setLoading(false);
         })
 
         return(()=>{
@@ -85,7 +87,7 @@ export default function Landing(){
     return(  
         <div className={classes.background}>
             <Instructions openInstructions={openInstructions} setOpenInstructions={setOpenInstructions}/>
-            <Popup showPopup={showPopup} setShowPopup={setShowPopup} state={state} setState={setState}/>
+            <Popup showPopup={showPopup} setShowPopup={setShowPopup} state={state} setState={setState} setLoading={setLoading} loading={loading}/>
             <Join showJoin={showJoin} setShowJoin={setShowJoin} state={state} setState={setState}/>
             <Create showCreate={showCreate} setShowCreate={setShowCreate}/>
             <div className={classes.header}>
