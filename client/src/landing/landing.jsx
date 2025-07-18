@@ -9,20 +9,22 @@ import { useNavigate } from "react-router-dom";
 import ambiance from "../assets/ambiance.mp3";
 import bubbles from "../assets/bubbles.mp3";
 import Create from "./create/create.jsx";
+import Instructions from "./instructions/instructions.jsx";
 const ambianceAudio = new Audio(ambiance);
 ambianceAudio.loop = true;
 ambianceAudio.volume = 0.1;
 //declared audio globally so it doesnt keep making a new audio instance every refresh
 //and
-
+const uiClick = new Audio(bubbles);
 export default function Landing(){
     const [showPopup, setShowPopup] = useState(false);
     const [showJoin, setShowJoin] = useState(false);
     const [roomID, setRoomID] = useState("");
     const [showCreate, setShowCreate] = useState(false);
     const {socket, state, setState, setDifficulty} = useContext(AppContext);
+    const [openInstructions, setOpenInstructions] = useState(false);
     const navigate = useNavigate()
-    const uiClick = new Audio(bubbles);
+    
     useEffect(()=>{
         ambianceAudio.pause();
         ambianceAudio.currentTime = 0;
@@ -82,6 +84,7 @@ export default function Landing(){
 
     return(  
         <div className={classes.background}>
+            <Instructions openInstructions={openInstructions} setOpenInstructions={setOpenInstructions}/>
             <Popup showPopup={showPopup} setShowPopup={setShowPopup} state={state} setState={setState}/>
             <Join showJoin={showJoin} setShowJoin={setShowJoin} state={state} setState={setState}/>
             <Create showCreate={showCreate} setShowCreate={setShowCreate}/>
@@ -111,7 +114,13 @@ export default function Landing(){
                     <button className={state == "crew" ? classes.blueButton : classes.hidden} onClick={joinCrew}>Join Crew</button>
 
                     <button className={state == "lobby" ? classes.blueButton : classes.hidden} onClick={Release}>Release</button>
+
+                    <div className={classes.bottom}>
+                        <button className={classes.blueButton} onClick={()=>{setOpenInstructions(true); uiClick.play()}}>Instructions</button>
+                    </div>
                 </div>
+
+                
                 
 
             </div>
