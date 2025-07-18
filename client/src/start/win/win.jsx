@@ -6,7 +6,7 @@ import { AppContext } from '../../App';
 export default function Win({time, win, wordCount, pWordCount, difficulty}){
 
         const navigate = useNavigate();
-        const {setState} = useContext(AppContext);
+        const {setState, avatars} = useContext(AppContext);
         const [currDiff, setCurrDiff] = useState("easy");
 
         function playAgain(){
