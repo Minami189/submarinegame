@@ -12,7 +12,7 @@
 .lostBody{
     background-color: #E8E8D7;
     min-width: 350px;
-    min-height: 350px;
+    min-height: 440px;
     display:flex;
     flex-direction: column;
     align-items: center;
@@ -68,7 +68,7 @@
     padding: 35px 10px 25px 10px;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    height:50%;
+    max-height:170px;
     gap:10px;
     overflow-y: scroll;
     scrollbar-width: none;

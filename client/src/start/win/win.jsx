@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { AppContext } from '../../App';
 
 export default function Win({time, win, wordCount, pWordCount, difficulty}){
-
+       
         const navigate = useNavigate();
         const {setState, avatars} = useContext(AppContext);
         const [currDiff, setCurrDiff] = useState("easy");
@@ -31,19 +31,23 @@ export default function Win({time, win, wordCount, pWordCount, difficulty}){
                 <h2>the End!</h2>
                 <h1 style={{marginTop: "15px"}}>🚩{time} seconds</h1>
                 <h1 style={{marginTop: "5px"}}>{currDiff}</h1>
-                {
-                    pWordCount.map((p)=>{
-                        return(
-                            <div className={classes.statWrapper}>
-                                <img src={avatars[p.avatar]} style={{width: "35px", height: "35px", borderRadius: "50%"}}/>
-                                <div className={classes.statContent}>
-                                    <p>{p.username}</p>
-                                    <h4>{`${p.count} word(s)`}</h4>
+                <div className={classes.playerWC}>
+
+                
+                    {
+                        pWordCount.map((p)=>{
+                            return(
+                                <div className={classes.statWrapper}>
+                                    <img src={avatars[p.avatar]} style={{width: "35px", height: "35px", borderRadius: "50%"}}/>
+                                    <div className={classes.statContent}>
+                                        <p>{p.username}</p>
+                                        <h4>{`${p.count} word(s)`}</h4>
+                                    </div>
                                 </div>
-                            </div>
-                        )
-                    })
-                }
+                            )
+                        })
+                    }
+                </div>
                 <button onClick={playAgain} className={classes.blueButton}>Play again</button>
             </div>
         </div>
