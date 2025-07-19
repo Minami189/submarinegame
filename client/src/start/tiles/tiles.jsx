@@ -59,6 +59,7 @@ export default function Tiles({setEffects, setBoss, boss, over, setOver, difficu
         const deoded = jwtDecode(localStorage.getItem("instanceToken"));
         socket.emit("send_word", {word: word, roomID: localStorage.getItem("roomID"), instanceID: deoded.instanceID});
         wordInput.current.value = "";
+        wordInput.current?.focus()
         setWord("");
     }
 
@@ -82,27 +83,29 @@ export default function Tiles({setEffects, setBoss, boss, over, setOver, difficu
 
     function animateDeny(){
         //simple animation for when invalid word
+        wordInput.current?.focus()
         const denySound = new Audio(wordDeny);
         denySound.play();
         setDenied(true);
         setTimeout(()=>{setDenied(false)}, 500)
+        
     }
 
 
     return(
         <div className={classes.tilesWrapper} onClick={() => wordInput.current?.focus()}>
             <form onSubmit={handleSubmit} style={{position: "absolute",
-                                                                top: 0,
-                                                                left: 0,
-                                                                width: 1,
-                                                                height: 1,
+                                                                top: "-10vh",
+                                                                left: "-10vw",
+                                                                width: "200px",
+                                                                height: "400px",
                                                                 border: "none",
                                                                 padding: 0,
                                                                 margin: 0,
-                                                                opacity: 0,
+                                                                opacity: 1,
                                                                 fontSize: 16, 
                                                                 zIndex: 0,}}>
-                <input autoFocus disabled={over} onChange={handleChange} ref={wordInput} maxLength={5} onBlur={()=>setTimeout(() => wordInput.current?.focus(), 100)}/>
+                <input autoFocus disabled={over} onChange={handleChange} ref={wordInput} maxLength={5}/>
             </form>
             
             <div className={`${classes.tile} ${denied ? classes.denied : ""} ${boss > 0 ? classes.bossFight : ""}`} onClick={() => wordInput.current?.focus()}>{word[0]}</div>

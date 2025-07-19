@@ -45,10 +45,6 @@
 
 
 @media only screen and (min-device-width: 1024px) and (max-device-width: 1366px) {
-  input {
-    font-size: 20px; /* Make input more tappable */
-  }
-
   .tilesWrapper{
     position: absolute;
     height: 62vh;
