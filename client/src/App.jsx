@@ -25,15 +25,20 @@ function App() {
   const [state, setState] = useState("username");
   const [av, setAv] = useState(0);
   const [difficulty, setDifficulty] = useState();
+  const [joinedPlayers, setJoinedPlayers] = useState([]);
   const avatars = [av1,av2,av3,av4,av5,av6,av7,av8,av9,av10]; 
   //states:
     //username - play button to input username
     //crew - joining and creating crew
     //lobby - when in a crew already
     //start - when game has started
-
+  useEffect(()=>{
+    if(joinedPlayers.length > 0){
+      setJoinedPlayers([]);
+    }
+  },[])
   return (
-    <AppContext.Provider value={{socket, state, setState, av, setAv, avatars, difficulty, setDifficulty}}>
+    <AppContext.Provider value={{socket, state, setState, av, setAv, avatars, difficulty, setDifficulty, joinedPlayers, setJoinedPlayers}}>
       <BrowserRouter>
         <Routes>
           <Route index element={<Landing/>}/>

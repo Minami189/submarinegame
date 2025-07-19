@@ -9,6 +9,7 @@ import Lost from "./lost/lost.jsx";
 import Win from "./win/win.jsx";
 import Boss from "./boss/boss.jsx";
 import boss from "../assets/boss.mp3"
+import placeholder from "../assets/placeholder.png";
 import { useNavigate } from "react-router-dom";
 
 
@@ -16,7 +17,7 @@ const bossMusic = new Audio(boss);
 
 export default function Start(){
 
-    const { socket, difficulty, setDifficulty} = useContext(AppContext);
+    const { socket, difficulty, setDifficulty, joinedPlayers, avatars} = useContext(AppContext);
     const [depth, setDepth] = useState(0);
     const [oxygen, setOxygen] = useState(100);
     const [effects, setEffects] = useState([]);
@@ -90,16 +91,32 @@ export default function Start(){
             <Win win={win} wordCount={wordCount} time={time} pWordCount={pWordCount} difficulty={difficulty}/>
             <Lost lost={lost}  lastDepth={lastDepth} wordCount={wordCount} pWordCount={pWordCount} difficulty={difficulty}/>
             <Oxygen oxygen={oxygen} boss={boss}/>
+
+            <div className={classes.depth} style={ boss > 0 ? {color:"maroon"} : {}}>
+                <h1>{`${depth >= 100 ? Math.floor(depth/8) : 0}m`}</h1>
+            </div>
+
             <div className={classes.center}>
                 {
                     effects.map((effect)=>{
                         return(<Effect word={effect.word} avatar={effect.avatar} username={effect.username} oxadd={effect.oxadd}/>)
                     })
                 }
-                <div className={classes.depth} style={ boss > 0 ? {color:"maroon"} : {}}>
-                    {`${depth >= 100 ? Math.floor(depth/8) : 0}m`}
+                
+                
+                <div style={{display:"flex", justifyContent:"center", alignItems: "center"}}>
+                    <div className={classes.submarine}>
+                        <div className={classes.playersWrapper}>
+                            <div className={classes.players}><img src={avatars[joinedPlayers[3]?.avatar] || placeholder}/></div>
+                            <div className={classes.players}><img src={avatars[joinedPlayers[2]?.avatar] || placeholder}/></div>
+                            <div className={classes.players}><img src={avatars[joinedPlayers[1]?.avatar] || placeholder}/></div>
+                            <div className={classes.players}><img src={avatars[joinedPlayers[0]?.avatar] || placeholder}/></div>
+                        </div>
+                        <img src={submarine}/>
+                    </div>
+                    
                 </div>
-                <img src={submarine} className={classes.submarine}/>
+                
             </div>
           
             

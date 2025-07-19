@@ -147,6 +147,8 @@ io.on("connection", (socket)=>{
             }, 500)
         }
         socket.join(roomID);
+
+        io.to(roomID).emit("notify_join", {joinedPlayers: rooms[roomID].players});
         socket.emit("join_lobby", {roomID: roomID, difficulty: rooms[roomID].difficulty});
         console.log(rooms[roomID]);
     })
@@ -155,6 +157,7 @@ io.on("connection", (socket)=>{
 
     socket.on("join_crew", (data)=>{
         const instanceID = data.instanceID;
+        console.log(rooms[data.roomID]);
         socket.rooms.forEach((v)=>{
             if(v != socket.id){
                 socket.leave(v);
@@ -167,7 +170,7 @@ io.on("connection", (socket)=>{
         }
 
         const joinedRoom = rooms[data.roomID];
-        if(!joinedRoom || joinedRoom.started){
+        if(!joinedRoom || joinedRoom.started || joinedRoom.players.length > 3){
             socket.emit("no_room");
             return;
         }
@@ -175,6 +178,8 @@ io.on("connection", (socket)=>{
         rooms[data.roomID].players.push({username: players[instanceID].username, avatar: players[instanceID].avatar});
         console.log(rooms[data.roomID].players);
         socket.join(data.roomID);
+
+        io.to(data.roomID).emit("notify_join", {joinedPlayers: rooms[data.roomID].players});
         socket.emit("join_lobby", {roomID: data.roomID, difficulty: rooms[data.roomID].difficulty});
     })
 
@@ -248,8 +253,8 @@ io.on("connection", (socket)=>{
                 socket.leave(v);
             }
         })
-    
-        if(!rooms[data.roomID] || [data.roomID] == "" || [data.roomID] == null){
+        if(!data.roomID) return;
+        if(!rooms[data.roomID] || data.roomID == "" || data.roomID == null){
             return
         }
 

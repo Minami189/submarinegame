@@ -10,6 +10,7 @@ import ambiance from "../assets/ambiance.mp3";
 import bubbles from "../assets/bubbles.mp3";
 import Create from "./create/create.jsx";
 import Instructions from "./instructions/instructions.jsx";
+import placeholder from "../assets/placeholder.png";
 const ambianceAudio = new Audio(ambiance);
 ambianceAudio.loop = true;
 ambianceAudio.volume = 0.1;
@@ -21,18 +22,21 @@ export default function Landing(){
     const [showJoin, setShowJoin] = useState(false);
     const [roomID, setRoomID] = useState("");
     const [showCreate, setShowCreate] = useState(false);
-    const {socket, state, setState, setDifficulty} = useContext(AppContext);
+    const {socket, state, setState, setDifficulty, joinedPlayers, setJoinedPlayers, avatars} = useContext(AppContext);
     const [openInstructions, setOpenInstructions] = useState(false);
     const [loading , setLoading] = useState(false);
+    const [notif, setNotif] = useState([]);
     const navigate = useNavigate()
     
     useEffect(()=>{
         ambianceAudio.pause();
         ambianceAudio.currentTime = 0;
-
+        if(state!="lobby"){
+            setJoinedPlayers([])
+        }
         
         setState("username");
-        
+        socket.emit("reconnect", {roomID: localStorage.getItem("roomID")});
 
         socket.on("begin", (data)=>{
             setState("start")
@@ -55,6 +59,12 @@ export default function Landing(){
             setLoading(false);
         })
 
+        socket.on("notify_join", (data)=>{
+            console.log("joined players " + data.joinedPlayers);
+            setJoinedPlayers(data.joinedPlayers);
+            
+        })
+
         return(()=>{
             socket.off("join_lobby");
             socket.off("begin");
@@ -62,7 +72,6 @@ export default function Landing(){
     }, [])
 
 
-    
     function handlePlay(){
         setShowPopup(true);
         uiClick.play();
@@ -107,7 +116,32 @@ export default function Landing(){
                     <h3>Inspired by Neal's "the deep sea"</h3>
                 </div>
                 
-                <img src={submarine}/>
+                
+                <div style={{display:"flex", justifyContent:"center", alignItems: "center"}}>
+                    <div className={classes.right}>
+                        {
+                            joinedPlayers.map((p)=>{
+                                return(
+                                    <div className={classes.notif}>
+                                        <img src={avatars[p.avatar]} style={{marginRight: "5px"}}/>
+                                        <h5>{p.username}</h5>
+                                    </div>
+                                )
+                            })
+                        }
+                    </div>
+                    
+                    <div className={classes.playersWrapper}>
+                        <img className={classes.players} src={avatars[joinedPlayers[3]?.avatar] || placeholder}/>
+                        <img className={classes.players} src={avatars[joinedPlayers[2]?.avatar] || placeholder}/>
+                        <img className={classes.players} src={avatars[joinedPlayers[1]?.avatar] || placeholder}/>
+                        <img className={classes.players} src={avatars[joinedPlayers[0]?.avatar] || placeholder}/>
+                    </div>  
+
+                     
+                    <img src={submarine}/>
+                </div>
+                
                 
                 <div className={classes.buttonWrapper}>
                     <button className={state == "username" ? classes.blueButton : classes.hidden} onClick={handlePlay}>Play</button>

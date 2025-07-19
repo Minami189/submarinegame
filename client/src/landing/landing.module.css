@@ -103,3 +103,68 @@ a{
     justify-content: center;
 }
 
+.playersWrapper{
+    position: absolute;
+    display:flex;
+    justify-content: flex-end;
+    width: 420px;
+    height: 50px;
+    gap: 50px;
+
+}
+
+img.players{
+    height: 30px;
+    width: 30px;
+    background-color: #C4DACF;
+    border: solid 3px #66412B;
+    border-radius: 50%;
+}
+
+.notif{
+    background-color: rgba(0, 0, 0, 0.555);
+    font-family: Inter;
+    font-size: 1.2rem;
+    color:white;
+    padding: 0px 10px 0px 10px;
+    border-radius: 5px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+
+    height: 50px;
+    min-width: 100px;
+    animation: notifanimation 1s forwards;
+
+}
+
+.notif img{
+    height:40px;
+    width: 40px;
+    border-radius: 25px;
+
+}
+
+
+.right{
+    width: 100vw;
+    height:100vh;
+    display:flex;
+    flex-direction: column;
+    align-items: flex-end;
+    position:absolute;
+    top:5vh;
+    right:2vw;
+    gap:15px;
+}
+
+@keyframes notifanimation {
+    0%{
+        transform:translateX(10vw);
+    }
+
+
+    100%{
+        transform:translateX(0vw);
+    }
+}
