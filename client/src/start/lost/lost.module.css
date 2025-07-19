@@ -20,7 +20,7 @@
     justify-content: flex-start;
     border-radius: 25px;
     padding: 15px 10px 25px 10px;
-    
+    z-index: 150;
     position:relative;
 }
 

@@ -91,9 +91,18 @@ export default function Tiles({setEffects, setBoss, boss, over, setOver, difficu
         
     }
 
+    function focusInputSafely() {
+        console.log("click")
+        if (!over) {
+                requestAnimationFrame(() => {
+                wordInput.current?.focus();
+            });
+        }
+    }
+
 
     return(
-        <div className={classes.tilesWrapper} onClick={() => wordInput.current?.focus()}>
+        <div className={classes.tilesWrapper} onClick={() => focusInputSafely()}>
             <form onSubmit={handleSubmit} style={{position: "absolute",
                                                                 top: "-10vh",
                                                                 left: "-10vw",
@@ -108,11 +117,11 @@ export default function Tiles({setEffects, setBoss, boss, over, setOver, difficu
                 <input autoFocus disabled={over} onChange={handleChange} ref={wordInput} maxLength={5}/>
             </form>
             
-            <div className={`${classes.tile} ${denied ? classes.denied : ""} ${boss > 0 ? classes.bossFight : ""}`} onClick={() => wordInput.current?.focus()}>{word[0]}</div>
-            <div className={`${classes.tile} ${denied ? classes.denied : ""} ${boss > 0 ? classes.bossFight : ""}`} onClick={() => wordInput.current?.focus()}>{word[1]}</div>
-            <div className={`${classes.tile} ${denied ? classes.denied : ""} ${boss > 0 ? classes.bossFight : ""}`} onClick={() => wordInput.current?.focus()}>{word[2]}</div>
-            <div className={`${classes.tile} ${length < 4 ?  classes.gold : ""} ${denied ? classes.denied : ""} ${boss > 0 ? classes.bossFight : ""}`} onClick={() => wordInput.current?.focus()}>{word[3]}</div>
-            <div className={`${classes.tile} ${length < 5 ?  classes.gold : ""} ${denied ? classes.denied : ""} ${boss > 0 ? classes.bossFight : ""}`} onClick={() => wordInput.current?.focus()}>{word[4]}</div>
+            <div className={`${classes.tile} ${denied ? classes.denied : ""} ${boss > 0 ? classes.bossFight : ""}`} onClick={() => focusInputSafely()}>{word[0]}</div>
+            <div className={`${classes.tile} ${denied ? classes.denied : ""} ${boss > 0 ? classes.bossFight : ""}`} onClick={() => focusInputSafely()}>{word[1]}</div>
+            <div className={`${classes.tile} ${denied ? classes.denied : ""} ${boss > 0 ? classes.bossFight : ""}`} onClick={() => focusInputSafely()}>{word[2]}</div>
+            <div className={`${classes.tile} ${length < 4 ?  classes.gold : ""} ${denied ? classes.denied : ""} ${boss > 0 ? classes.bossFight : ""}`} onClick={() => focusInputSafely()}>{word[3]}</div>
+            <div className={`${classes.tile} ${length < 5 ?  classes.gold : ""} ${denied ? classes.denied : ""} ${boss > 0 ? classes.bossFight : ""}`} onClick={() => focusInputSafely()}>{word[4]}</div>
         </div>
     )
 }
