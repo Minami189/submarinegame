@@ -1,6 +1,4 @@
 import { useState, useEffect, createContext } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import "./App.css"
 import io from "socket.io-client";
@@ -19,14 +17,18 @@ import av7 from "./assets/av7.png";
 import av8 from "./assets/av8.png";
 import av9 from "./assets/av9.png";
 import av10 from "./assets/av10.png";
-
+import ambiance from "./assets/ambiance.mp3";
 
 function App() {
   const [state, setState] = useState("username");
   const [av, setAv] = useState(0);
   const [difficulty, setDifficulty] = useState();
   const [joinedPlayers, setJoinedPlayers] = useState([]);
-  const avatars = [av1,av2,av3,av4,av5,av6,av7,av8,av9,av10]; 
+  const avatars = [av1,av2,av3,av4,av5,av6,av7,av8,av9,av10];
+  const ambianceAudio = new Audio(ambiance);
+  ambianceAudio.pause();
+  ambianceAudio.currentTime = 0;
+  ambianceAudio.loop = false;
   //states:
     //username - play button to input username
     //crew - joining and creating crew
@@ -38,7 +40,7 @@ function App() {
     }
   },[])
   return (
-    <AppContext.Provider value={{socket, state, setState, av, setAv, avatars, difficulty, setDifficulty, joinedPlayers, setJoinedPlayers}}>
+    <AppContext.Provider value={{socket, state, setState, av, setAv, avatars, difficulty, setDifficulty, joinedPlayers, setJoinedPlayers, ambianceAudio}}>
       <BrowserRouter>
         <Routes>
           <Route index element={<Landing/>}/>

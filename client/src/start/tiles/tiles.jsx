@@ -6,7 +6,7 @@ import tiles from "../../assets/tiles.mp3"
 import wordSuccess from "../../assets/success.mp3";
 import wordDeny from "../../assets/denied.mp3"
 
-export default function Tiles({setEffects, setBoss, boss, over, setOver, difficulty}){
+export default function Tiles({setEffects, setBoss, boss, over, setOver, difficulty, setInteract}){
     const [word, setWord] = useState("");    
     const wordInput = useRef();
     const {socket} = useContext(AppContext);
@@ -44,6 +44,7 @@ export default function Tiles({setEffects, setBoss, boss, over, setOver, difficu
         tileSound.volume = 0.6
         tileSound.play();      
         setWord(input);    
+        setInteract(true)
     }
 
     async function handleSubmit(event){
@@ -92,7 +93,8 @@ export default function Tiles({setEffects, setBoss, boss, over, setOver, difficu
     }
 
     function focusInputSafely() {
-        console.log("click")
+        //this is for the audio
+        setInteract(true);
         if (!over) {
                 requestAnimationFrame(() => {
                 wordInput.current?.focus();

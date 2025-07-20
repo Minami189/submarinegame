@@ -6,14 +6,11 @@ import { useState, useContext, useEffect } from "react";
 import { AppContext } from "../App.jsx";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
-import ambiance from "../assets/ambiance.mp3";
 import bubbles from "../assets/bubbles.mp3";
 import Create from "./create/create.jsx";
 import Instructions from "./instructions/instructions.jsx";
 import placeholder from "../assets/placeholder.png";
-const ambianceAudio = new Audio(ambiance);
-ambianceAudio.loop = true;
-ambianceAudio.volume = 0.1;
+
 //declared audio globally so it doesnt keep making a new audio instance every refresh
 //and
 const uiClick = new Audio(bubbles);
@@ -22,15 +19,17 @@ export default function Landing(){
     const [showJoin, setShowJoin] = useState(false);
     const [roomID, setRoomID] = useState("");
     const [showCreate, setShowCreate] = useState(false);
-    const {socket, state, setState, setDifficulty, joinedPlayers, setJoinedPlayers, avatars} = useContext(AppContext);
+    const {socket, state, setState, setDifficulty, joinedPlayers, setJoinedPlayers, avatars, ambianceAudio} = useContext(AppContext);
     const [openInstructions, setOpenInstructions] = useState(false);
     const [loading , setLoading] = useState(false);
     const [notif, setNotif] = useState([]);
     const navigate = useNavigate()
     
     useEffect(()=>{
-        ambianceAudio.pause();
+        ambianceAudio.loop = false;
         ambianceAudio.currentTime = 0;
+        ambianceAudio.pause();
+        
         if(state!="lobby"){
             setJoinedPlayers([])
         }
@@ -42,10 +41,7 @@ export default function Landing(){
             setState("start")
             navigate("/start");
             uiClick.play();
-            const playDelay = setTimeout(()=>{
-                ambianceAudio.play();
-                clearTimeout(playDelay);
-            }, 2000)
+
         })
 
         socket.on("join_lobby", (data)=>{

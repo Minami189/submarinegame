@@ -17,6 +17,7 @@ export default function Popoup({ showPopup, setShowPopup, setState, loading, set
             localStorage.setItem("instanceToken", data.instanceToken);
             setShowPopup(false);
             setState("crew");
+            console.log(data.instanceToken);
         });
 
         if (localStorage.getItem("instanceToken")) {
@@ -52,7 +53,15 @@ export default function Popoup({ showPopup, setShowPopup, setState, loading, set
             return;
         }
         uiClick.play();
-        socket.emit("create_user", { avatar: av, username: username.trim() });
+        let instanceID;
+        const token = localStorage.getItem("instanceToken")
+        if(token){
+            const decoded = jwtDecode(token);
+            instanceID = decoded.instanceID;
+            console.log("instance ID editing " + instanceID);
+        }
+
+        socket.emit("create_user", { avatar: av, username: username.trim(), instanceID: instanceID});
         setLoading(true);
     }
 

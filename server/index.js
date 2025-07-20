@@ -35,11 +35,19 @@ io.on("connection", (socket)=>{
     })
 
     socket.on("create_user", (data)=>{
+        if(players[data.instanceID] !== undefined){
+            players[data.instanceID] = {username: data.username, avatar: data.avatar, instanceID: data.instanceID};
+            const instanceToken = jwt.sign({username: data.username, avatar: data.avatar, instanceID: data.instanceID}, process.env.PRIVATE_KEY);
+            socket.emit("login", {instanceToken: instanceToken});
+            console.log("changing user to ", players[data.instanceID]);
+            return;
+        }
+
         const instanceID = chance.string({length: 10});
         players[instanceID] = {username: data.username, avatar: data.avatar, instanceID: instanceID};
         const instanceToken = jwt.sign({username: data.username, avatar: data.avatar, instanceID: instanceID}, process.env.PRIVATE_KEY);
         socket.emit("login", {instanceToken: instanceToken});
-        console.log("creating user " + data);
+        console.log("creating user " + data.username);
     })
 
     socket.on("create_crew", (data)=>{
@@ -63,7 +71,7 @@ io.on("connection", (socket)=>{
             fightingBoss: false, 
             wordsInputted: [],
             playerWordCount: [],
-            players: [{username: players[instanceID].username, avatar: players[instanceID].avatar}],
+            players: [{instanceID:instanceID, username: players[instanceID].username, avatar: players[instanceID].avatar}],
             state: "lobby",
             depth: 0,
             interval: setInterval(()=>{
@@ -157,7 +165,7 @@ io.on("connection", (socket)=>{
 
     socket.on("join_crew", (data)=>{
         const instanceID = data.instanceID;
-        console.log(rooms[data.roomID]);
+        console.log("attempting to join room ", rooms[data.roomID]);
         socket.rooms.forEach((v)=>{
             if(v != socket.id){
                 socket.leave(v);
@@ -175,10 +183,18 @@ io.on("connection", (socket)=>{
             return;
         }
 
-        rooms[data.roomID].players.push({username: players[instanceID].username, avatar: players[instanceID].avatar});
-        console.log(rooms[data.roomID].players);
-        socket.join(data.roomID);
+        const foundPlayer = rooms[data.roomID].players.findIndex((p)=>p.instanceID == instanceID);
+        console.log("finding someone with instanceID " + instanceID + " in ", rooms[data.roomID].players);
+        if(foundPlayer > -1){
+            rooms[data.roomID].players[foundPlayer] = {instanceID: instanceID, username: players[instanceID].username, avatar: players[instanceID].avatar};
+            socket.join(data.roomID);
+        }else{
+            rooms[data.roomID].players.push({instanceID: instanceID, username: players[instanceID].username, avatar: players[instanceID].avatar});
+            console.log(rooms[data.roomID].players);
+            socket.join(data.roomID);
+        }
 
+       
         io.to(data.roomID).emit("notify_join", {joinedPlayers: rooms[data.roomID].players});
         socket.emit("join_lobby", {roomID: data.roomID, difficulty: rooms[data.roomID].difficulty});
     })
@@ -259,7 +275,7 @@ io.on("connection", (socket)=>{
         }
 
         socket.join(data.roomID);
-        socket.emit("update_state", {state:rooms[data.roomID].state})
+        socket.emit("update_state", {state:rooms[data.roomID].state, joinedPlayers:rooms[data.roomID].players, boss:rooms[data.roomID].boss})
     })
 })
  

@@ -8,16 +8,15 @@ import Effect from "./effect/effect.jsx";
 import Lost from "./lost/lost.jsx";
 import Win from "./win/win.jsx";
 import Boss from "./boss/boss.jsx";
-import boss from "../assets/boss.mp3"
+import bossAudio from "../assets/boss.mp3"
 import placeholder from "../assets/placeholder.png";
 import { useNavigate } from "react-router-dom";
+const bossMusic = new Audio(bossAudio);
 
-
-const bossMusic = new Audio(boss);
 
 export default function Start(){
 
-    const { socket, difficulty, setDifficulty, joinedPlayers, avatars} = useContext(AppContext);
+    const { socket, difficulty, setDifficulty, joinedPlayers, avatars, setJoinedPlayers, ambianceAudio} = useContext(AppContext);
     const [depth, setDepth] = useState(0);
     const [oxygen, setOxygen] = useState(100);
     const [effects, setEffects] = useState([]);
@@ -29,16 +28,32 @@ export default function Start(){
     const [boss, setBoss] = useState(0);
     const [over, setOver] = useState(false);
     const [pWordCount, setPWordCount] = useState([]);
-
+    const [interact, setInteract] = useState(false);
+    
+    
     const navigate = useNavigate();
     useEffect(() => {
+        setTimeout(()=>{
+            ambianceAudio.volume = 0.1;
+            ambianceAudio.loop = true;
+            ambianceAudio.play();
+        },2000)
+        
 
         socket.emit("reconnect", {roomID: localStorage.getItem("roomID")});
+        console.log("interacted")
+    
         
+
         socket.on("update_state", (data)=>{
             if(data.state == "win" || data.state == "lose"){
                 navigate('/');
             }
+
+            console.log("boss is " + data.boss)
+            setBoss(data.boss);
+            setJoinedPlayers(data.joinedPlayers);
+            console.log("reconnect");
         })
 
         socket.on("depth_update", ({ depth, oxygen, state }) => {
@@ -69,7 +84,6 @@ export default function Start(){
         })
 
         socket.on("boss", (data)=>{
-            console.log("boss " + data.boss)
             setBoss(data.boss);
             bossMusic.loop = true;
             bossMusic.play();
@@ -83,6 +97,21 @@ export default function Start(){
         };
 
     }, []);
+
+    useEffect(()=>{
+        if(interact){
+            if(boss > 0){
+                bossMusic.loop = true;
+                bossMusic.play();
+            }
+            setTimeout(()=>{
+                ambianceAudio.volume = 0.1;
+                ambianceAudio.loop = true;
+                ambianceAudio.play();
+            },2000)
+        }
+    }, [interact])
+
 
 
 
@@ -128,7 +157,7 @@ export default function Start(){
                 <div className={classes.water4}></div>
             </div>
             <Boss boss={boss} setBoss={setBoss} bossMusic={bossMusic}/>
-            <Tiles setEffects={setEffects} setBoss={setBoss} boss={boss} over={over} setOver={setOver} difficulty={difficulty}/>
+            <Tiles setEffects={setEffects} setBoss={setBoss} boss={boss} over={over} setOver={setOver} difficulty={difficulty} setInteract={setInteract} interact={interact}/>
         </div>
     )
 }
